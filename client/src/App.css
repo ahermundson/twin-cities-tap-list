@@ -1,0 +1,64 @@
+/*@import "~react-bootstrap-table/css/react-bootstrap-table.css"*/
+
+html {
+  background: url(../public/taplist.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: white;
+}
+
+.App {
+  text-align: center;
+}
+
+.find-brewery-button {
+  margin-top: 15px;
+  margin-bottom: 25px;
+  font-size: 25px;
+  padding: 20px;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.leaflet-container {
+    height: 200px;
+    width: 200px;
+    margin-bottom: 35px;
+}
+
+.header {
+  margin-top: 100px;
+  color: white;
+}
+
+.home {
+  width: 75%;
+  height: 25%;
+  background-color: grey;
+  border: 5px solid white;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.map {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
