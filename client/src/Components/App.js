@@ -37,7 +37,6 @@ class App extends Component {
 
   closeLeftNav = (value) => {
     this.setState({menuOpen: false})
-    console.log(value)
   };
   render() {
 
@@ -73,13 +72,20 @@ class App extends Component {
                 onTouchTap={this.closeLeftNav}
                 value={'/bars'}
                 primaryText="All Bars"
-                containerElement={<Link to='bars' />}
+                containerElement={<Link to='/bars' />}
               />
               <Divider />
+                <MenuItem
+                  onTouchTap={this.closeLeftNav}
+                  value={'/taplistentry'}
+                  primaryText="Enter A Tap List"
+                  containerElement={<Link to='/taplistentry' />}
+                />
+                <Divider />
             </Drawer>
             <Route exact path="/" component={Home} />
             <Route path="/beers" component={Beers} />
-            <Route path="/bars" component={Bars} />
+            <Route path="/bars/:beer_id" component={Bars} />
             <Route path="/taplistentry" component={TapListEntry} />
           </div>
         </Router>

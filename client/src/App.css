@@ -11,10 +11,16 @@ html {
 body {
   margin: 0;
   padding: 0;
+  background-color: rgba(0,0,0,0);
 }
 
 h1 {
   color: white;
+  text-align: center;
+}
+
+.table {
+  margin-bottom: 0px;
 }
 
 .App {
@@ -34,13 +40,13 @@ h1 {
 }
 
 .leaflet-container {
-    height: 200px;
-    width: 200px;
+    height: 80%;
+    width: 80%;
     margin-bottom: 35px;
 }
 
 .header {
-  margin-top: 100px;
+  margin-top: 40px;
   color: white;
 }
 
@@ -61,4 +67,15 @@ h1 {
   margin: 0 auto;
   display: flex;
   justify-content: center;
+}
+
+.beer-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-bs-table-container {
+  width: 100%
 }
