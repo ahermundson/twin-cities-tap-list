@@ -5,6 +5,9 @@ class LeafletMap extends Component {
 
   componentWillReceiveProps(nextProps) {
     console.log("PROPS: ", nextProps);
+    this.setState({
+      markers: nextProps.markers
+    })
   }
 
   getLocation() {
@@ -50,13 +53,15 @@ class LeafletMap extends Component {
     this.getDistance = this.getDistance.bind(this)
 
     this.state = {
-      position: [44.909444, -93.263566]
+      position: [44.909444, -93.263566],
+      markers: []
     }
   }
 
   render(){
 
-    const markerElements = this.props.markers.map((marker, index) => {
+    const markerElements = this.state.markers.map((marker, index) => {
+      console.log(marker);
       return <Marker
         position={marker.position}
         key={index}
@@ -69,7 +74,6 @@ class LeafletMap extends Component {
 
     return(
       <div className="info">
-          <h1>Test</h1>
           <Map center={this.state.position} zoom={14}>
             <TileLayer
               url='http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png'

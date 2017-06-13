@@ -36,12 +36,14 @@ h1 {
 
 .info {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .leaflet-container {
-    height: 80%;
-    width: 80%;
+    height: 600px;
+    width: 400px;
     margin-bottom: 35px;
 }
 
