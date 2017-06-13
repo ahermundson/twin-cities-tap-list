@@ -1,0 +1,18 @@
+var mongoose = require('mongoose');
+var connectionString = require('./database-config');
+
+var connectToMongoDatabase = function() {
+  console.log(connectionString);
+  mongoose.connect(connectionString);
+  mongoose.set('debug', true);
+
+  mongoose.connection.on('connected', function () {
+    console.log('Mongoose connected to ', connectionString);
+  });
+
+  mongoose.connection.on('error', function (err) {
+    console.log('Mongoose failed to connect because error: ', err);
+  });
+}
+
+module.exports = { connect: connectToMongoDatabase };
