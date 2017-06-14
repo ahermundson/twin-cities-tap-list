@@ -13,6 +13,15 @@ const styles = {
   },
   header: {
     paddingRight: "0px"
+  },
+  title: {
+    fontSize: "1.4em"
+  },
+  cardText: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
   }
 }
 
@@ -52,9 +61,13 @@ class SingleBar extends Component {
         <CardHeader
           title={this.props.name}
           textStyle={styles.header}
+          titleStyle={styles.title}
         />
-        <CardText>
-          {this.props.description}
+        <CardText
+          style={styles.cardText}>
+          <span>{this.props.street_address}</span>
+          <span>{this.props.city}, {this.props.state}</span>
+          <span>{this.props.zip}</span>
         </CardText>
         <CardTitle title="Card title" subtitle="Card subtitle" expandable={true} />
         <BarMap
@@ -62,9 +75,13 @@ class SingleBar extends Component {
           name={this.props.name}
           expandable={true}
         />
-        <CardActions>
-        <FlatButton label="Show Map" onTouchTap={this.handleExpand} />
-        <FlatButton label="Hide Map" onTouchTap={this.handleReduce} />
+      {!this.state.expanded ? <CardActions>
+        <FlatButton label="More" onTouchTap={this.handleExpand} />
+        </CardActions> : null}
+        <CardActions
+          expandable={true}>
+          <FlatButton label="Less"
+            onTouchTap={this.handleReduce}/>
         </CardActions>
       </Card>
     );

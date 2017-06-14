@@ -22,7 +22,7 @@ class Bars extends Component {
       .then(bars => {
         let barMarkers = bars.map((bar) => {
           return {
-            position: [bar.longitude, bar.latitude],
+            position: [bar.latitude, bar.longitude],
             name: bar.bar_name
           }
         });
@@ -46,7 +46,10 @@ class Bars extends Component {
     const barCards = this.state.bars.map((bar) => {
       return <SingleBar
         name={bar.bar_name}
-        description={bar.website}
+        street_address={bar.street_address}
+        city={bar.city}
+        state={bar.state}
+        zip={bar.zip}
         position={[bar.latitude, bar.longitude]}
         key={bar._id}
       />

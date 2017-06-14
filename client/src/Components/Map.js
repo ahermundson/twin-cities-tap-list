@@ -6,7 +6,8 @@ class LeafletMap extends Component {
   componentWillReceiveProps(nextProps) {
     console.log("PROPS: ", nextProps);
     this.setState({
-      markers: nextProps.markers
+      markers: nextProps.markers,
+      position: nextProps.markers[0].position
     })
   }
 
@@ -61,7 +62,6 @@ class LeafletMap extends Component {
   render(){
 
     const markerElements = this.state.markers.map((marker, index) => {
-      console.log(marker);
       return <Marker
         position={marker.position}
         key={index}
@@ -70,11 +70,11 @@ class LeafletMap extends Component {
           <span>{marker.name}</span>
         </Popup>
       </Marker>
-    })
+    });
 
     return(
       <div className="info">
-          <Map center={this.state.position} zoom={14}>
+          <Map center={this.state.position} zoom={12}>
             <TileLayer
               url='http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png'
             />
