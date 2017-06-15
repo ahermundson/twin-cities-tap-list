@@ -3,6 +3,7 @@ import { Card, CardHeader, CardText, CardActions, CardTitle } from 'material-ui/
 import FlatButton from 'material-ui/FlatButton'
 import BarMap from './BarMap'
 import {red600} from 'material-ui/styles/colors'
+import {Link} from 'react-router-dom'
 
 const styles = {
   card: {
@@ -65,6 +66,7 @@ class SingleBar extends Component {
         />
         <CardText
           style={styles.cardText}>
+          <Link to={`/bar/${this.props.bar_id}`}>See Bar Information</Link>
           <span>{this.props.street_address}</span>
           <span>{this.props.city}, {this.props.state}</span>
           <span>{this.props.zip}</span>

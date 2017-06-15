@@ -52,6 +52,7 @@ class Bars extends Component {
         zip={bar.zip}
         position={[bar.latitude, bar.longitude]}
         key={bar._id}
+        bar_id={bar._id}
       />
     });
 

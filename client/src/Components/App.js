@@ -4,6 +4,7 @@ import Home from './Home'
 import Beers from './Beers'
 import Bars from './Bars'
 import TapListEntry from './TapListEntry'
+import BarInfo from './BarInfo'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -87,6 +88,7 @@ class App extends Component {
             <Route path="/beers" component={Beers} />
             <Route path="/bars/:beer_id" component={Bars} />
             <Route path="/taplistentry" component={TapListEntry} />
+            <Route path="/bar" component={BarInfo} />
           </div>
         </Router>
 
