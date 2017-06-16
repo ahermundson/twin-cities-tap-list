@@ -88,7 +88,7 @@ class App extends Component {
             <Route path="/beers" component={Beers} />
             <Route path="/bars/:beer_id" component={Bars} />
             <Route path="/taplistentry" component={TapListEntry} />
-            <Route path="/bar" component={BarInfo} />
+            <Route path="/bar/:beer_id" component={BarInfo} />
           </div>
         </Router>
 
