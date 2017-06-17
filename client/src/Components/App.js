@@ -71,9 +71,9 @@ class App extends Component {
               <Divider />
               <MenuItem
                 onTouchTap={this.closeLeftNav}
-                value={'/bars'}
+                value={'/allbars'}
                 primaryText="All Bars"
-                containerElement={<Link to='/bars' />}
+                containerElement={<Link to='/allbars' />}
               />
               <Divider />
                 <MenuItem
@@ -87,7 +87,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/beers" component={Beers} />
             <Route path="/bars/:beer_id" component={Bars} />
-            <Route path="/bars/" component={Bars} />
+            <Route path="/allbars/" component={Bars} />
             <Route path="/taplistentry" component={TapListEntry} />
             <Route path="/bar/:beer_id" component={BarInfo} />
           </div>

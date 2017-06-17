@@ -37,10 +37,20 @@ class BarInfo extends Component {
         <Card>
           <CardTitle title={this.state.bar.bar_name} subtitle={this.state.bar.website} />
           <CardText>
-            <h5>On Tap</h5>
-            <ul className="single-bar-tap-list">
-              {beers_on_tap}
-            </ul>
+            <div className="single-bar-container">
+              <div>
+                <h5>On Tap</h5>
+                <ul className="single-bar-tap-list">
+                  {beers_on_tap}
+                </ul>
+              </div>
+              <div className="single-bar-location">
+                <h5>Address</h5>
+                <span>{this.state.bar.street_address}</span>
+                <span>{this.state.bar.city}, {this.state.bar.state}</span>
+                <span>{this.state.bar.zip}</span>
+              </div>
+            </div>
           </CardText>
         </Card>
       </div>

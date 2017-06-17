@@ -89,4 +89,29 @@ h1 {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  padding-left: 0;
+}
+
+.single-bar-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.single-bar-location {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@media only screen and (max-width: 768px) {
+    .single-bar-container {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+
+    .single-bar-location {
+      width: 100%;
+      align-items: flex-start;
+    }
 }
