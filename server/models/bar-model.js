@@ -10,7 +10,8 @@ var barSchema = new Schema({
   zip: Number,
   latitude: Number,
   longitude: Number,
-  beers_on_tap: [{type: Schema.Types.ObjectId, ref: 'Beer'}]
+  beers_on_tap: [{type: Schema.Types.ObjectId, ref: 'Beer'}],
+  website: String
 });
 
 barSchema.pre('save', function(next) {

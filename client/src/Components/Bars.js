@@ -17,21 +17,38 @@ const styles = {
 class Bars extends Component {
 
   componentDidMount() {
-    fetch(`/bars/?id=${this.props.match.params.beer_id}`)
-      .then(res => res.json())
-      .then(bars => {
-        let barMarkers = bars.map((bar) => {
-          return {
-            position: [bar.latitude, bar.longitude],
-            name: bar.bar_name
-          }
+    if (this.props.match.params.hasOwnProperty('beer_id')){
+      fetch(`/bars/?id=${this.props.match.params.beer_id}`)
+        .then(res => res.json())
+        .then(bars => {
+          let barMarkers = bars.map((bar) => {
+            return {
+              position: [bar.latitude, bar.longitude],
+              name: bar.bar_name
+            }
+          });
+          this.setState({
+            bars: bars,
+            barMarkers: barMarkers
+          });
         });
-        console.log("MARKERS: ", barMarkers);
-        this.setState({
-          bars: bars,
-          barMarkers: barMarkers
+    } else {
+      fetch(`/bars`)
+        .then(res => res.json())
+        .then(bars => {
+          let barMarkers = bars.map((bar) => {
+            return {
+              position: [bar.latitude, bar.longitude],
+              name: bar.bar_name
+            }
+          });
+          this.setState({
+            bars: bars,
+            barMarkers: barMarkers
+          });
         });
-      });
+    }
+
   }
 
   constructor(props){

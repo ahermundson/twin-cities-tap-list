@@ -82,3 +82,11 @@ h1 {
 .react-bs-table-container {
   width: 100%
 }
+
+.single-bar-tap-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
