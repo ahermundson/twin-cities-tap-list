@@ -4,6 +4,7 @@ import {Tabs, Tab} from 'material-ui/Tabs'
 import AutoComplete from 'material-ui/AutoComplete'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
+import Snackbar from 'material-ui/Snackbar'
 import {red600} from 'material-ui/styles/colors'
 
 const dataSourceConfig = {
@@ -28,6 +29,9 @@ const styles = {
   },
   hintStyle: {
     paddingLeft: '8px'
+  },
+  textHintStyle: {
+    color: 'white'
   },
   raisedButton: {
     marginTop: '12px'
@@ -77,7 +81,8 @@ class TapListEntry extends Component {
       dataSource: [],
       selected: [],
       breweries: [],
-      dataSourceBrewery: []
+      dataSourceBrewery: [],
+      open: false
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -85,6 +90,7 @@ class TapListEntry extends Component {
     this.chosenRequest = this.chosenRequest.bind(this);
     this.chosenRequestBrewery = this.chosenRequestBrewery.bind(this);
     this.onBeerSubmit = this.onBeerSubmit.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
   onSubmit() {
@@ -119,9 +125,15 @@ class TapListEntry extends Component {
         "Content-Type": "application/json"
       }
     })
-    .then(function(response) {
+    .then(response => {
+      this.setState({
+        open: true,
+        chosenBrewery: '',
+        beer_name: '',
+        beer_style: ''
+      });
       console.log(response);
-    })
+    });
   }
 
   onRowSelect({_id}, isSelected) {
@@ -152,6 +164,12 @@ class TapListEntry extends Component {
   handleBeerNameChange = (event) => {
     this.setState({
       beer_name: event.target.value,
+    });
+  };
+
+  handleRequestClose() {
+    this.setState({
+      open: false
     });
   };
 
@@ -209,14 +227,21 @@ class TapListEntry extends Component {
                   inputStyle={styles.textFieldStyle}
                   hintStyle={styles.hintStyle}
                   onNewRequest={this.chosenRequestBrewery}
+                  value={this.state.chosenBrewery}
                 />
                 <TextField
                   id="text-field-controlled"
+                  hintText="Enter Beer Name"
                   onChange={this.handleBeerNameChange}
+                  hintStyle={styles.textHintStyle}
+                  value={this.state.beer_name}
                 />
                 <TextField
                   id="text-field-controlled"
+                  hintText="Enter Beer Style"
                   onChange={this.handleStyleChange}
+                  hintStyle={styles.textHintStyle}
+                  value={this.state.beer_style}
                 />
                 <RaisedButton
                   label="Submit"
@@ -225,6 +250,12 @@ class TapListEntry extends Component {
                   onClick={this.onBeerSubmit}
                 />
               </div>
+              <Snackbar
+                open={this.state.open}
+                message="Beer added successfully."
+                autoHideDuration={4000}
+                onRequestClose={this.handleRequestClose}
+              />
             </div>
           </Tab>
         </Tabs>

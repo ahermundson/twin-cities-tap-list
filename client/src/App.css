@@ -100,10 +100,11 @@ h1 {
 .single-bar-location {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
 }
 
+
+/*MEDIA QUERIES*/
 @media only screen and (max-width: 768px) {
     .single-bar-container {
       flex-direction: column-reverse;
