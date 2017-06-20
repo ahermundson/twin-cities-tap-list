@@ -18,15 +18,20 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-  Beer.create({ beer_name: req.body.beer_name, style: req.body.beer_style, brewery_name: req.body.brewery})
-    .exec(function(err, response) {
-      if(err) {
-        console.log("Error in post");
-        res.send("ERROR");
-      } else {
-        res.sendStatus(201);
-      }
-    })
-})
+  console.log("REQ", req);
+  var addedBeer = new Beer({
+    beer_name: req.body.beer_name,
+    style: req.body.beer_style,
+    brewery_name: req.body.brewery});
+  addedBeer.save((err, data) => {
+    console.log('save data', data);
+    if (err) {
+      console.log('Error: ', err);
+      res.sendStatus(500);
+    } else {
+      res.send(data);
+    }
+  });
+});
 
 module.exports = router;

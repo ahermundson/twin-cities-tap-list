@@ -82,7 +82,8 @@ class TapListEntry extends Component {
       selected: [],
       breweries: [],
       dataSourceBrewery: [],
-      open: false
+      open: false,
+      noBreweryOpen: false
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -112,28 +113,41 @@ class TapListEntry extends Component {
   }
 
   onBeerSubmit() {
-    let beerToAdd = {
-      brewery: this.state.chosenBrewery,
-      beer_name: this.state.beer_name,
-      beer_style: this.state.beer_style
-    };
+    if(this.state.chosenBrewery) {
+      let beerToAdd = {
+        brewery: this.state.chosenBrewery,
+        beer_name: this.state.beer_name,
+        beer_style: this.state.beer_style
+      };
 
-    fetch('/beers', {
-      method: 'POST',
-      body: JSON.stringify(beerToAdd),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(response => {
-      this.setState({
-        open: true,
-        chosenBrewery: '',
-        beer_name: '',
-        beer_style: ''
+      fetch('/beers', {
+        method: 'POST',
+        body: JSON.stringify(beerToAdd),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(beer => {
+        console.log(beer._id);
+        var brewery = this.state.dataSourceBrewery.filter(brewery => brewery._id = beer.brewery_name);
+        var addedBeer = {
+          _id: beer._id,
+          name: `${brewery[0].brewery_name} ${beer.beer_name}`
+        };
+        this.setState({
+          open: true,
+          beer_name: '',
+          beer_style: '',
+          beers: [...this.state.beers, addedBeer]
+        });
       });
-      console.log(response);
-    });
+    } else {
+      this.setState({
+        noBreweryOpen: true
+      });
+    }
+
   }
 
   onRowSelect({_id}, isSelected) {
@@ -169,7 +183,8 @@ class TapListEntry extends Component {
 
   handleRequestClose() {
     this.setState({
-      open: false
+      open: false,
+      noBreweryOpen: false
     });
   };
 
@@ -256,6 +271,12 @@ class TapListEntry extends Component {
                 autoHideDuration={4000}
                 onRequestClose={this.handleRequestClose}
               />
+            <Snackbar
+              open={this.state.noBreweryOpen}
+              message="You have not selected a brewery."
+              autoHideDuration={3000}
+              onRequestClose={this.handleRequestClose}
+            />
             </div>
           </Tab>
         </Tabs>
