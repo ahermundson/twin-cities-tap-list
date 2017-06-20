@@ -23,15 +23,16 @@ router.post('/', function(req, res) {
     beer_name: req.body.beer_name,
     style: req.body.beer_style,
     brewery_name: req.body.brewery});
+
   addedBeer.save((err, data) => {
-    console.log('save data', data);
-    if (err) {
-      console.log('Error: ', err);
-      res.sendStatus(500);
-    } else {
-      res.send(data);
-    }
+      console.log('save data', data);
+      if (err) {
+        console.log('Error: ', err);
+        res.sendStatus(500);
+      } else {
+        res.send(data);
+      }
+    });
   });
-});
 
 module.exports = router;

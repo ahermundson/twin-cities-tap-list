@@ -127,10 +127,12 @@ class TapListEntry extends Component {
           "Content-Type": "application/json"
         }
       })
-      .then(res => res.json())
+      .then(res => {
+        console.log(res.json());
+        res.json()
+      })
       .then(beer => {
-        console.log(beer._id);
-        var brewery = this.state.dataSourceBrewery.filter(brewery => brewery._id = beer.brewery_name);
+        var brewery = this.state.dataSourceBrewery.filter(brewery => brewery._id === beer.brewery_name);
         var addedBeer = {
           _id: beer._id,
           name: `${brewery[0].brewery_name} ${beer.beer_name}`
