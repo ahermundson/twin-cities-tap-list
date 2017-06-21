@@ -76,7 +76,7 @@ class LeafletMap extends Component {
       <div className="info">
           <Map center={this.state.position} zoom={12}>
             <TileLayer
-              url='http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+              url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
             />
             {markerElements}
           </Map>
