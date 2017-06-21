@@ -51,26 +51,9 @@ const styles = {
 class TapListEntry extends Component {
 
   componentDidMount() {
-    fetch('/beers')
-      .then(res => res.json())
-      .then(beers => {
-        beers.forEach((beer) => {
-          beer.name = `${beer.brewery_name.brewery_name} ${beer.beer_name}`;
-        });
-        this.setState({beers: beers})
-      });
-
-    fetch('/bars')
-      .then(res => res.json())
-      .then(bars => {
-        this.setState({dataSource: bars})
-      });
-
-    fetch('/breweries')
-      .then(res => res.json())
-      .then(breweries => {
-        this.setState({dataSourceBrewery: breweries});
-      })
+    this.getBeers();
+    this.getBars();
+    this.getBreweries();
   }
 
   constructor(props){
@@ -86,12 +69,55 @@ class TapListEntry extends Component {
       noBreweryOpen: false
     };
 
+
+    //FUNCTION BINDINGS
     this.onSubmit = this.onSubmit.bind(this);
     this.onRowSelect = this.onRowSelect.bind(this);
     this.chosenRequest = this.chosenRequest.bind(this);
     this.chosenRequestBrewery = this.chosenRequestBrewery.bind(this);
     this.onBeerSubmit = this.onBeerSubmit.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
+    this.fetchBars = this.fetchBars.bind(this);
+    this.getBars = this.getBars.bind(this);
+    this.fetchBreweries = this.fetchBreweries.bind(this);
+    this.getBreweries = this.getBreweries.bind(this);
+    this.fetchBeers = this.fetchBeers.bind(this);
+    this.getBeers = this.getBeers.bind(this);
+  }
+
+  fetchBars() {
+    return fetch('/bars');
+  }
+  fetchBreweries() {
+    return fetch('/breweries');
+  }
+  fetchBeers() {
+    return fetch('/beers');
+  }
+
+  async getBars() {
+    const barsResponse = await this.fetchBars();
+    const bars = await barsResponse.json();
+    this.setState({
+      dataSource: bars
+    });
+  }
+
+  async getBreweries() {
+    const breweriesResponse = await this.fetchBreweries();
+    const breweries = await breweriesResponse.json();
+    this.setState({
+      dataSourceBrewery: breweries
+    });
+  }
+
+  async getBeers() {
+    const beerResponse = await this.fetchBeers();
+    const beers = await beerResponse.json();
+    beers.forEach((beer) => {
+      beer.name = `${beer.brewery_name.brewery_name} ${beer.beer_name}`;
+    });
+    this.setState({beers: beers})
   }
 
   onSubmit() {
