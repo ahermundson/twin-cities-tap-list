@@ -77,26 +77,18 @@ class TapListEntry extends Component {
     this.chosenRequestBrewery = this.chosenRequestBrewery.bind(this);
     this.onBeerSubmit = this.onBeerSubmit.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.fetchBars = this.fetchBars.bind(this);
+    this.fetchData = this.fetchData.bind(this);
     this.getBars = this.getBars.bind(this);
-    this.fetchBreweries = this.fetchBreweries.bind(this);
     this.getBreweries = this.getBreweries.bind(this);
-    this.fetchBeers = this.fetchBeers.bind(this);
     this.getBeers = this.getBeers.bind(this);
   }
 
-  fetchBars() {
-    return fetch('/bars');
-  }
-  fetchBreweries() {
-    return fetch('/breweries');
-  }
-  fetchBeers() {
-    return fetch('/beers');
+  fetchData(path) {
+    return fetch(`${path}`);
   }
 
   async getBars() {
-    const barsResponse = await this.fetchBars();
+    const barsResponse = await this.fetchData('/bars');
     const bars = await barsResponse.json();
     this.setState({
       dataSource: bars
@@ -104,7 +96,7 @@ class TapListEntry extends Component {
   }
 
   async getBreweries() {
-    const breweriesResponse = await this.fetchBreweries();
+    const breweriesResponse = await this.fetchData('/breweries');
     const breweries = await breweriesResponse.json();
     this.setState({
       dataSourceBrewery: breweries
@@ -112,7 +104,7 @@ class TapListEntry extends Component {
   }
 
   async getBeers() {
-    const beerResponse = await this.fetchBeers();
+    const beerResponse = await this.fetchData('/beers');
     const beers = await beerResponse.json();
     beers.forEach((beer) => {
       beer.name = `${beer.brewery_name.brewery_name} ${beer.beer_name}`;
