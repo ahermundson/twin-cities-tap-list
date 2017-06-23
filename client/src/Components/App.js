@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
+import Auth from '../Auth/Auth'
 import Home from './Home'
 import Beers from './Beers'
 import Bars from './Bars'
@@ -22,6 +23,7 @@ const styles = {
   titleStyle: 'white'
 }
 
+const auth = new Auth();
 
 class App extends Component {
   constructor(props){
@@ -30,6 +32,11 @@ class App extends Component {
     this.state = {menuOpen: false};
     this.handleToggle = this.handleToggle.bind(this);
     this.closeLeftNav = this.closeLeftNav.bind(this);
+    this.login = this.login.bind(this);
+  }
+
+  login() {
+    auth.login();
   }
 
   handleToggle = () => {
@@ -82,7 +89,11 @@ class App extends Component {
                   primaryText="Enter A Tap List"
                   containerElement={<Link to='/taplistentry' />}
                 />
-                <Divider />
+              <Divider />
+              <MenuItem
+                onTouchTap={this.login}
+                primaryText="Login"
+              />
             </Drawer>
             <Route exact path="/" component={Home} />
             <Route path="/beers" component={Beers} />

@@ -6,9 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Snackbar from 'material-ui/Snackbar'
 import {red600} from 'material-ui/styles/colors'
-import Auth from '../Auth/Auth'
-
-const auth = new Auth();
 
 const dataSourceConfig = {
   text: "bar_name",
@@ -57,7 +54,6 @@ class TapListEntry extends Component {
     this.getBeers();
     this.getBars();
     this.getBreweries();
-    auth.login();
   }
 
   constructor(props){
