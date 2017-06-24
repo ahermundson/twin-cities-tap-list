@@ -9,7 +9,7 @@ export default class Auth {
     redirectUri: 'http://localhost:3000',
     audience: process.env.REACT_APP_AUTH_AUDIENCE,
     responseType: 'token id_token',
-    scope: 'openid'
+    scope: 'openid read.profile'
   });
 
   constructor() {
