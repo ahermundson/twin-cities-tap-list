@@ -16,7 +16,8 @@
     "react-burger-menu": "^2.0.2",
     "react-dom": "^15.5.4",
     "react-leaflet": "^1.1.6",
-    "react-router-dom": "^4.1.1"
+    "react-router-dom": "^4.1.1",
+    "react-spinkit": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

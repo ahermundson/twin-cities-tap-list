@@ -26,17 +26,39 @@ const styles = {
 const auth = new Auth();
 
 class App extends Component {
+
+  componentDidMount() {
+    let isauth = this.isAuthenticated();
+    console.log(isauth);
+    this.setState({
+      isAuth: isauth
+    });
+  }
+
   constructor(props){
     super(props);
 
-    this.state = {menuOpen: false};
+    this.state = {menuOpen: false, profile: {}, isAuth: false};
     this.handleToggle = this.handleToggle.bind(this);
     this.closeLeftNav = this.closeLeftNav.bind(this);
     this.login = this.login.bind(this);
+    this.isAuthenticated = this.isAuthenticated.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   login() {
     auth.login();
+  }
+
+  isAuthenticated() {
+    return auth.isAuthenticated();
+  }
+
+  logout() {
+    auth.logout();
+    this.setState({
+      isAuth: false
+    });
   }
 
   handleToggle = () => {
@@ -90,12 +112,18 @@ class App extends Component {
                   containerElement={<Link to='/taplistentry' />}
                 />
               <Divider />
-              <MenuItem
-                onTouchTap={this.login}
-                primaryText="Login"
-              />
+              {
+                this.state.isAuth ? <MenuItem
+                  onTouchTap={this.logout}
+                  primaryText="Logout"
+                /> : <MenuItem
+                  onTouchTap={this.login}
+                  primaryText="Login"
+                />
+              }
             </Drawer>
             <Route exact path="/" component={Home} />
+            <Route path="/home" component={Home} />
             <Route path="/beers" component={Beers} />
             <Route path="/bars/:beer_id" component={Bars} />
             <Route path="/allbars/" component={Bars} />

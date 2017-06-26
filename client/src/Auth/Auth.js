@@ -9,7 +9,7 @@ export default class Auth {
     redirectUri: 'http://localhost:3000',
     audience: process.env.REACT_APP_AUTH_AUDIENCE,
     responseType: 'token id_token',
-    scope: 'openid read.profile'
+    scope: 'openid profile read.current_user'
   });
 
   constructor() {
@@ -17,6 +17,7 @@ export default class Auth {
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
+    this.getProfile = this.getProfile.bind(this);
   }
 
   login() {
@@ -58,6 +59,18 @@ export default class Auth {
     // Check whether the current time is past the
     // access token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    console.log(expiresAt);
     return new Date().getTime() < expiresAt;
   }
+
+  getProfile(cb) {
+  let accessToken = localStorage.access_token;
+  this.auth0.client.userInfo(accessToken, (err, profile) => {
+    if (profile) {
+      console.log("PROFILE: ", profile);
+      this.userProfile = profile;
+    }
+    cb(err, profile);
+  });
+}
 }

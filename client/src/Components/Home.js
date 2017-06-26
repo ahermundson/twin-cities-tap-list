@@ -3,15 +3,23 @@ import '../App.css';
 import RaisedButton from 'material-ui/RaisedButton'
 import AutoComplete from 'material-ui/AutoComplete'
 import {Link} from 'react-router-dom'
+import Spinner from 'react-spinkit'
+import Auth from '../Auth/Auth'
+import {red600} from 'material-ui/styles/colors'
 
 const dataSourceConfig = {
   text: "name",
   value: "_id"
 }
 
+const auth = new Auth();
+
 class Home extends Component {
 
   componentDidMount() {
+    // this.setState({
+    //   loading: true
+    // });
     fetch('/beers')
       .then(res => res.json())
       .then(beers => {
@@ -20,6 +28,13 @@ class Home extends Component {
         });
         this.setState({dataSource: beers})
       });
+      auth.handleAuthentication();
+      // auth.getProfile((err, profile) => {
+      //   console.log(profile);
+      //   this.setState({
+      //     loading: false
+      //   });
+      // });
   }
 
   constructor(props){
@@ -66,25 +81,32 @@ class Home extends Component {
       }
     };
 
+    const loading = <Spinner name='double-bounce' color={red600} overrideSpinnerClassName="circle-wrapper"/>;
+
+    const home = <div className="home">
+      <h1 className="header">What do you want to drink tonight?</h1>
+        <AutoComplete
+          hintText="Search..."
+          dataSource={this.state.dataSource}
+          dataSourceConfig={dataSourceConfig}
+          style={styles.autocomplete}
+          inputStyle={styles.textFieldStyle}
+          hintStyle={styles.hintStyle}
+          onNewRequest={this.chosenRequest}
+        />
+      <Link to={`/bars/${this.state.chosenBeer}`}>
+        <RaisedButton
+          label="Search"
+          style={styles.button}
+        />
+      </Link>
+    </div>
+
     return(
-      <div className="home">
-        <h1 className="header">What do you want to drink tonight?</h1>
-          <AutoComplete
-            hintText="Search..."
-            dataSource={this.state.dataSource}
-            dataSourceConfig={dataSourceConfig}
-            style={styles.autocomplete}
-            inputStyle={styles.textFieldStyle}
-            hintStyle={styles.hintStyle}
-            onNewRequest={this.chosenRequest}
-          />
-        <Link to={`/bars/${this.state.chosenBeer}`}>
-          <RaisedButton
-            label="Search"
-            style={styles.button}
-          />
-        </Link>
+      <div className="homeContainer">
+        {this.state.loading ? loading : home}
       </div>
+
     );
   }
 }

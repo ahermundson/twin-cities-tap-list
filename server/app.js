@@ -13,6 +13,7 @@ var bars = require('./routes/bars');
 var beers = require('./routes/beers');
 var breweries = require('./routes/breweries');
 var bar = require('./routes/singleBar');
+var users = require('./routes/users');
 var app = express();
 
 // view engine setup
@@ -32,6 +33,7 @@ app.use('/bars', bars);
 app.use('/beers', beers);
 app.use('/breweries', breweries);
 app.use('/bar', bar);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
