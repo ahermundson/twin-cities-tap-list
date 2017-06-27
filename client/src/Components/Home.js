@@ -4,7 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton'
 import AutoComplete from 'material-ui/AutoComplete'
 import {Link} from 'react-router-dom'
 import Spinner from 'react-spinkit'
-import Auth from '../Auth/Auth'
 import {red600} from 'material-ui/styles/colors'
 
 const dataSourceConfig = {
@@ -12,29 +11,20 @@ const dataSourceConfig = {
   value: "_id"
 }
 
-const auth = new Auth();
-
 class Home extends Component {
 
   componentDidMount() {
-    // this.setState({
-    //   loading: true
-    // });
+    this.setState({
+      loading: true
+    });
     fetch('/beers')
       .then(res => res.json())
       .then(beers => {
         beers.forEach((beer) => {
           beer.name = `${beer.brewery_name.brewery_name} ${beer.beer_name}`;
         });
-        this.setState({dataSource: beers})
+        this.setState({dataSource: beers, loading: false})
       });
-      auth.handleAuthentication();
-      // auth.getProfile((err, profile) => {
-      //   console.log(profile);
-      //   this.setState({
-      //     loading: false
-      //   });
-      // });
   }
 
   constructor(props){

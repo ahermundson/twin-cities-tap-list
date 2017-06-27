@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Auth from '../Auth/Auth'
-import auth0 from 'auth0-lock'
 import Home from './Home'
 import Beers from './Beers'
 import Bars from './Bars'
@@ -30,14 +29,18 @@ class App extends Component {
 
   componentDidMount() {
     let isauth = this.isAuthenticated();
-    console.log(isauth);
     this.setState({
       isAuth: isauth
     });
-
-    this.lock = new auth0(
-      process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_AUTH_DOMAIN
-    );
+    auth.handleAuthentication();
+    if (isauth) {
+      auth.getProfile((err, profile) => {
+        this.setState({
+          loading: false,
+          profile: profile
+        });
+      });
+    }
   }
 
   constructor(props){

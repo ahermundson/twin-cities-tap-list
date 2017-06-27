@@ -2,6 +2,10 @@ require('dotenv').config();
 import auth0 from 'auth0-js';
 import history from '../history'
 
+var options = {
+  avatar: null
+}
+
 export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -9,7 +13,8 @@ export default class Auth {
     redirectUri: 'http://localhost:3000',
     audience: process.env.REACT_APP_AUTH_AUDIENCE,
     responseType: 'token id_token',
-    scope: 'openid profile read.current_user'
+    scope: 'openid profile read.current_user',
+    options: options
   });
 
   constructor() {
@@ -28,9 +33,9 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        history.replace('/home');
+        history.replace('/');
       } else if (err) {
-        history.replace('/home');
+        history.replace('/');
         console.log(err);
       }
     });
@@ -43,7 +48,7 @@ export default class Auth {
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
     // navigate to the home route
-    history.replace('/home');
+    history.replace('/');
   }
 
   logout() {
@@ -59,7 +64,6 @@ export default class Auth {
     // Check whether the current time is past the
     // access token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    console.log(expiresAt);
     return new Date().getTime() < expiresAt;
   }
 
@@ -67,7 +71,6 @@ export default class Auth {
   let accessToken = localStorage.access_token;
   this.auth0.client.userInfo(accessToken, (err, profile) => {
     if (profile) {
-      console.log("PROFILE: ", profile);
       this.userProfile = profile;
     }
     cb(err, profile);
