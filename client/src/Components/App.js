@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Auth from '../Auth/Auth'
+import auth0 from 'auth0-lock'
 import Home from './Home'
 import Beers from './Beers'
 import Bars from './Bars'
@@ -33,6 +34,10 @@ class App extends Component {
     this.setState({
       isAuth: isauth
     });
+
+    this.lock = new auth0(
+      process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_AUTH_DOMAIN
+    );
   }
 
   constructor(props){
