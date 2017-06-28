@@ -30,6 +30,10 @@ class App extends Component {
 
     this.auth = new Auth();
     this.lock = new Lock();
+
+    this.setState({
+      isAuth: this.isAuthenticated()
+    });
   }
 
   constructor(props){
@@ -39,14 +43,14 @@ class App extends Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.closeLeftNav = this.closeLeftNav.bind(this);
     this.login = this.login.bind(this);
-    // this.isAuthenticated = this.isAuthenticated.bind(this);
+    this.isAuthenticated = this.isAuthenticated.bind(this);
     // this.logout = this.logout.bind(this);
     this.getIdToken = this.getIdToken.bind(this);
   }
 
-  // isAuthenticated() {
-  //   return auth.isAuthenticated();
-  // }
+  isAuthenticated() {
+    return this.lock.isAuthenticated();
+  }
 
   // logout() {
   //   auth.logout();
@@ -84,9 +88,11 @@ class App extends Component {
   };
 
   login() {
+    this.setState({menuOpen: false})
     this.lock.login();
   }
   render() {
+
 
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
@@ -131,7 +137,7 @@ class App extends Component {
                 />
               <Divider />
               {
-                this.state.isAuth ? <MenuItem
+                this.isAuth ? <MenuItem
                   onTouchTap={this.logout}
                   primaryText="Logout"
                 /> : <MenuItem

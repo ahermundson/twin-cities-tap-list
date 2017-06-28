@@ -1,7 +1,4 @@
 import Auth0Lock from 'auth0-lock'
-import Auth from './Auth'
-
-const auth0 = new Auth();
 
 export default class Lock {
   lock = new Auth0Lock(
@@ -17,30 +14,19 @@ export default class Lock {
     constructor() {
       this.login = this.login.bind(this);
       this.logout = this.logout.bind(this);
-      this.handleAuthentication = this.handleAuthentication.bind(this);
       this.isAuthenticated = this.isAuthenticated.bind(this);
-      this.onAuthentication = this.onAuthentication.bind(this);
       // this.getProfile = this.getProfile.bind(this);
       this.lock.on('authenticated', (authResult) => {
-        console.log(authResult);
+        this.lock.hide();
+        this.setSession(authResult);
+        this.lock.getUserInfo(authResult.accessToken, (err, profile) => {
+          console.log(profile);
+        });
       })
     }
 
     login() {
       this.lock.show();
-    }
-
-    handleAuthentication() {
-      auth0.parseHash((err, authResult) => {
-        if (authResult && authResult.accessToken && authResult.idToken) {
-          this.setSession(authResult);
-          history.replace('/');
-          console.log("This");
-        } else if (err) {
-          history.replace('/');
-          console.log(err);
-        }
-      });
     }
 
     setSession(authResult) {
@@ -49,8 +35,6 @@ export default class Lock {
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
-      // navigate to the home route
-      history.replace('/');
     }
 
     logout() {
@@ -79,11 +63,5 @@ export default class Lock {
     //     cb(err, profile);
     //   });
     // }
-
-    onAuthentication() {
-      this.lock.on('authenticated', function(authResult) {
-        console.log(authResult);
-      });
-    }
 
 }
