@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Auth from '../Auth/Auth'
-import Auth0Lock from 'auth0-lock'
+import Lock from '../Auth/Lock'
 import Home from './Home'
 import Beers from './Beers'
 import Bars from './Bars'
@@ -28,22 +28,8 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.lock = new Auth0Lock(
-      process.env.REACT_APP_CLIENT_ID,
-      process.env.REACT_APP_AUTH_DOMAIN,
-      {
-        auth: {
-          redirectUrl: 'http://localhost:3000'
-        }
-      }
-    );
-
     this.auth = new Auth();
-
-    console.log("MOUNTED");
-
-    this.auth.handleAuthentication();
-
+    this.lock = new Lock();
   }
 
   constructor(props){
@@ -56,10 +42,6 @@ class App extends Component {
     // this.isAuthenticated = this.isAuthenticated.bind(this);
     // this.logout = this.logout.bind(this);
     this.getIdToken = this.getIdToken.bind(this);
-  }
-
-  login() {
-    this.lock.show();
   }
 
   // isAuthenticated() {
@@ -100,6 +82,10 @@ class App extends Component {
   closeLeftNav = (value) => {
     this.setState({menuOpen: false})
   };
+
+  login() {
+    this.lock.login();
+  }
   render() {
 
     return (
