@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Auth from '../Auth/Auth'
+import Lock from '../Auth/Lock'
 import Home from './Home'
 import Beers from './Beers'
 import Bars from './Bars'
@@ -23,24 +24,12 @@ const styles = {
   titleStyle: 'white'
 }
 
-const auth = new Auth();
-
 class App extends Component {
 
   componentDidMount() {
-    let isauth = this.isAuthenticated();
-    this.setState({
-      isAuth: isauth
-    });
-    auth.handleAuthentication();
-    if (isauth) {
-      auth.getProfile((err, profile) => {
-        this.setState({
-          loading: false,
-          profile: profile
-        });
-      });
-    }
+
+    this.auth = new Auth();
+    this.lock = new Lock();
   }
 
   constructor(props){
@@ -50,23 +39,40 @@ class App extends Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.closeLeftNav = this.closeLeftNav.bind(this);
     this.login = this.login.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.logout = this.logout.bind(this);
+    // this.isAuthenticated = this.isAuthenticated.bind(this);
+    // this.logout = this.logout.bind(this);
+    this.getIdToken = this.getIdToken.bind(this);
   }
 
-  login() {
-    auth.login();
-  }
+  // isAuthenticated() {
+  //   return auth.isAuthenticated();
+  // }
 
-  isAuthenticated() {
-    return auth.isAuthenticated();
-  }
+  // logout() {
+  //   auth.logout();
+  //   this.setState({
+  //     isAuth: false
+  //   });
+  // }
 
-  logout() {
-    auth.logout();
-    this.setState({
-      isAuth: false
-    });
+  getIdToken() {
+    // First, check if there is already a JWT in local storage
+    var idToken = localStorage.getItem('id_token');
+    var authHash = this.lock.parseHash(window.location.hash);
+    // If there is no JWT in local storage and there is one in the URL hash,
+    // save it in local storage
+    if (!idToken && authHash) {
+      if (authHash.id_token) {
+        idToken = authHash.id_token
+        localStorage.setItem('id_token', authHash.id_token);
+        console.log(idToken);
+      }
+      if (authHash.error) {
+        // Handle any error conditions
+        console.log("Error signing in", authHash);
+      }
+    }
+    return idToken;
   }
 
   handleToggle = () => {
@@ -76,6 +82,10 @@ class App extends Component {
   closeLeftNav = (value) => {
     this.setState({menuOpen: false})
   };
+
+  login() {
+    this.lock.login();
+  }
   render() {
 
     return (
@@ -126,7 +136,7 @@ class App extends Component {
                   primaryText="Logout"
                 /> : <MenuItem
                   onTouchTap={this.login}
-                  primaryText="Login"
+                  primaryText="Login / Sign Up"
                 />
               }
             </Drawer>

@@ -38,7 +38,6 @@ class Home extends Component {
     this.chosenRequest = this.chosenRequest.bind(this);
   }
 
-
   chosenRequest(chosen, index) {
     this.setState({
       chosenBeer: chosen._id
