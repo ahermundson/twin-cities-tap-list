@@ -47,7 +47,8 @@ class Home extends Component {
   render(){
     const styles = {
       button: {
-        margin: 12
+        margin: 12,
+        fontFamily: 'Cardo'
       },
       underlineStyle: {
         borderColor: 'black'
@@ -63,10 +64,12 @@ class Home extends Component {
       },
       textFieldStyle: {
         color: 'black',
-        paddingLeft: '8px'
+        paddingLeft: '8px',
+        fontFamily: 'Cardo'
       },
       hintStyle: {
-        paddingLeft: '8px'
+        paddingLeft: '8px',
+        fontFamily: 'Cardo'
       }
     };
 
