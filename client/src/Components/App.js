@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
-import Auth from '../Auth/Auth'
-import Lock from '../Auth/Lock'
+import Auth0Lock from 'auth0-lock'
+import history from '../history'
 import Home from './Home'
 import Beers from './Beers'
 import Bars from './Bars'
@@ -24,12 +24,35 @@ const styles = {
   titleStyle: 'white'
 }
 
+const lock = new Auth0Lock(
+  process.env.REACT_APP_CLIENT_ID,
+  process.env.REACT_APP_AUTH_DOMAIN,
+  {
+    auth: {
+      responseType: 'token',
+      redirect: false
+    }
+  });
+
 class App extends Component {
 
   componentDidMount() {
 
-    this.auth = new Auth();
-    this.lock = new Lock();
+    lock.on('authenticated', (authResult) => {
+      lock.hide();
+      this.setSession(authResult);
+      this.closeLeftNav();
+      lock.getUserInfo(authResult.accessToken, (err, profile) => {
+        localStorage.setItem('profile', profile);
+        fetch(`/users/?email=${profile.email}`)
+          .then(res => res.json())
+          .then(user => {
+            this.setState({
+              user: user
+            })
+          });
+      });
+    });
 
     this.setState({
       isAuth: this.isAuthenticated()
@@ -39,31 +62,43 @@ class App extends Component {
   constructor(props){
     super(props);
 
-    this.state = {menuOpen: false, profile: {}, isAuth: false};
+    this.state = {menuOpen: false, profile: {}, isAuth: false, user: {}};
     this.handleToggle = this.handleToggle.bind(this);
     this.closeLeftNav = this.closeLeftNav.bind(this);
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
-    // this.logout = this.logout.bind(this);
-    this.getIdToken = this.getIdToken.bind(this);
+    this.setSession = this.setSession.bind(this);
+  }
+
+  login() {
+    lock.show();
+  }
+
+  setSession(authResult) {
+    // Set the time that the access token will expire at
+    console.log()
+    let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
+  }
+
+  logout() {
+    // Clear access token and ID token from local storage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
+    history.replace('/');
   }
 
   isAuthenticated() {
-    return this.lock.isAuthenticated();
-  }
-
-  // logout() {
-  //   auth.logout();
-  //   this.setState({
-  //     isAuth: false
-  //   });
-  // }
-
-  getIdToken() {
-      return localStorage.getItem('id_token');
+    let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    return new Date().getTime() < expiresAt;
   }
 
   handleToggle = () => {
+    this.isAuthenticated();
     this.setState({menuOpen: !this.state.open})
   };
 
@@ -71,10 +106,6 @@ class App extends Component {
     this.setState({menuOpen: false})
   };
 
-  login() {
-    this.setState({menuOpen: false})
-    this.lock.login();
-  }
   render() {
 
 
@@ -121,7 +152,7 @@ class App extends Component {
                 />
               <Divider />
               {
-                this.isAuth ? <MenuItem
+                this.state.isAuth ? <MenuItem
                   onTouchTap={this.logout}
                   primaryText="Logout"
                 /> : <MenuItem
