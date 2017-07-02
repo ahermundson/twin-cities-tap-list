@@ -1,16 +1,25 @@
 import Auth0Lock from 'auth0-lock'
 import history from '../history'
+import {red600} from 'material-ui/styles/colors'
+
+const options = {
+  auth: {
+    responseType: 'token',
+    redirect: false
+  },
+  theme: {
+    primaryColor: red600
+  },
+  languageDictionary: {
+    title: "Twin Cities Tap List"
+  }
+}
 
 export default class Lock {
   lock = new Auth0Lock(
     process.env.REACT_APP_CLIENT_ID,
     process.env.REACT_APP_AUTH_DOMAIN,
-    {
-      auth: {
-        responseType: 'token',
-        redirect: false
-      }
-    });
+    options);
 
     constructor() {
       this.login = this.login.bind(this);

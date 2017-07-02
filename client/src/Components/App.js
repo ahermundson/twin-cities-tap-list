@@ -25,15 +25,24 @@ const styles = {
   titleStyle: 'white'
 }
 
+const options = {
+  auth: {
+    responseType: 'token',
+    redirect: false,
+    params: {scope: 'openid'}
+  },
+  theme: {
+    primaryColor: red600
+  },
+  languageDictionary: {
+    title: "Twin Cities Tap List"
+  }
+}
+
 const lock = new Auth0Lock(
   process.env.REACT_APP_CLIENT_ID,
   process.env.REACT_APP_AUTH_DOMAIN,
-  {
-    auth: {
-      responseType: 'token',
-      redirect: false
-    }
-  });
+  options);
 
 class App extends Component {
 
@@ -43,10 +52,16 @@ class App extends Component {
       lock.hide();
       this.setSession(authResult);
       this.closeLeftNav();
+      let accessToken = localStorage.getItem('id_token');
       lock.getUserInfo(authResult.accessToken, (err, profile) => {
-        fetch(`/users/?email=${profile.email}`)
+        fetch(`/users/?email=${profile.email}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
           .then(res => res.json())
           .then(user => {
+            console.log(user);
             this.setState({
               user: user,
               isAuth: true

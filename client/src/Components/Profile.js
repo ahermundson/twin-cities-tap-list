@@ -14,14 +14,14 @@ class Profile extends Component {
     //       })
     //     });
     // }
-    let accessToken = localStorage.getItem('id_token');
-    console.log(accessToken);
-    fetch(`/test`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    })
-      .then(res => console.log(res))
+    // let accessToken = localStorage.getItem('id_token');
+    // console.log(accessToken);
+    // fetch(`/test`, {
+    //   headers: {
+    //     'Authorization': `Bearer ${accessToken}`
+    //   }
+    // })
+    //   .then(res => console.log(res))
       // .then(result => console.log(result))
   }
 

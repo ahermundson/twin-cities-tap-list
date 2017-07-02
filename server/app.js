@@ -16,7 +16,11 @@ var bar = require('./routes/singleBar');
 var users = require('./routes/users');
 var app = express();
 const jwt = require('express-jwt');
-const jwksRsa = require('jwks-rsa');
+
+var jwtCheck = jwt({
+  secret: new Buffer(process.env.AUTH_SECRET),
+  audience: process.env.AUTH_CLIENT
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,10 +39,7 @@ app.use('/bars', bars);
 app.use('/beers', beers);
 app.use('/breweries', breweries);
 app.use('/bar', bar);
-app.use('/users', users);
-app.get('/test', function(req, res) {
-  console.log(req.headers);
-});
+app.use('/users', jwtCheck, users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
