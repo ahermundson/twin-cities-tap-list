@@ -6,15 +6,27 @@ var User = require('../models/user-model');
 router.get('/', (req, res) => {
   console.log('Req.query: ', req.query);
   console.log("QUERY.EMAIL: ", req.query.email);
-  User.findOne({email: req.query.email})
-    .exec((err, collection) => {
-      if(err) {
-        console.log("Error in bar search: ", err);
-      } else {
-        console.log("Collections: ", collection);
-        res.send(collection);
-      }
-    });
+  if (req.query.hasOwnProperty('email')){
+    User.findOne({email: req.query.email})
+      .exec((err, collection) => {
+        if(err) {
+          console.log("Error in bar search: ", err);
+        } else {
+          console.log("Collections: ", collection);
+          res.send(collection);
+        }
+      });
+  } else if (req.query.hasOwnProperty('id')){
+    User.findOne({_id: req.query.id})
+      .exec((err, collection) => {
+        if(err) {
+          console.log("Error in bar search: ", err);
+        } else {
+          console.log("Collections: ", collection);
+          res.send(collection);
+        }
+      });
+  }
 });
 
 // router.post('/', function(req, res) {

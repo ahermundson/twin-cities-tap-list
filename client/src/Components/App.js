@@ -7,6 +7,7 @@ import Beers from './Beers'
 import Bars from './Bars'
 import TapListEntry from './TapListEntry'
 import BarInfo from './BarInfo'
+import Profile from './Profile'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -43,13 +44,13 @@ class App extends Component {
       this.setSession(authResult);
       this.closeLeftNav();
       lock.getUserInfo(authResult.accessToken, (err, profile) => {
-        localStorage.setItem('profile', profile);
         fetch(`/users/?email=${profile.email}`)
           .then(res => res.json())
           .then(user => {
             this.setState({
-              user: user
-            })
+              user: user,
+              isAuth: true
+            });
           });
       });
     });
@@ -89,6 +90,10 @@ class App extends Component {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    this.setState({
+      user: {},
+      isAuth: false
+    });
     history.replace('/');
   }
 
@@ -123,6 +128,15 @@ class App extends Component {
               open={this.state.menuOpen}
               onRequestChange={open => this.setState({menuOpen: open})}
               docked={false}>
+              {
+                this.state.isAuth ? <div><MenuItem
+                  onTouchTap={this.closeLeftNav}
+                  value={'/profile'}
+                  primaryText="Your Profile"
+                  containerElement={<Link to={`/profile/${this.state.user._id}`} />}
+                />
+                <Divider /></div> : null
+              }
               <MenuItem
                 onTouchTap={this.closeLeftNav}
                 value={'/'}
@@ -168,6 +182,7 @@ class App extends Component {
             <Route path="/allbars/" component={Bars} />
             <Route path="/taplistentry" component={TapListEntry} />
             <Route path="/bar/:beer_id" component={BarInfo} />
+            <Route path="/profile/:user_id" component={Profile} />
           </div>
         </Router>
 
