@@ -32,7 +32,8 @@ const options = {
     params: {scope: 'openid'}
   },
   theme: {
-    primaryColor: red600
+    primaryColor: red600,
+    logo: 'http://simpleicon.com/wp-content/uploads/beer1-64x64.png'
   },
   languageDictionary: {
     title: "Twin Cities Tap List"

@@ -4,25 +4,21 @@ import {Card, CardHeader, CardText} from 'material-ui/Card'
 class Profile extends Component {
 
   componentDidMount() {
-    // if(this.props.match.params.user_id !== 'undefined') {
-    //   fetch(`/users/?id=${this.props.match.params.user_id}`)
-    //     .then(res => res.json())
-    //     .then(user => {
-    //       console.log(user);
-    //       this.setState({
-    //       user: user
-    //       })
-    //     });
-    // }
-    // let accessToken = localStorage.getItem('id_token');
-    // console.log(accessToken);
-    // fetch(`/test`, {
-    //   headers: {
-    //     'Authorization': `Bearer ${accessToken}`
-    //   }
-    // })
-    //   .then(res => console.log(res))
-      // .then(result => console.log(result))
+    let accessToken = localStorage.getItem('id_token');
+    if(this.props.match.params.user_id !== 'undefined') {
+      fetch(`/users/?id=${this.props.match.params.user_id}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+        .then(res => res.json())
+        .then(user => {
+          console.log(user);
+          this.setState({
+          user: user
+          })
+        });
+    }
   }
 
   constructor(props){
