@@ -140,4 +140,8 @@ h1 {
       width: 100%;
       align-items: flex-start;
     }
+
+    html {
+      background-color: rgb(48,48,48);
+    }
 }
