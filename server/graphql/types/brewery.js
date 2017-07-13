@@ -5,7 +5,7 @@ import {
   GraphQLID
 } from 'graphql'
 
-import BreweryModel from '../../models/brewery'
+import BreweryModel from '../../models/brewery-model'
 
 export const breweryType = new GraphQLObjectType({
   name: 'Brewery',

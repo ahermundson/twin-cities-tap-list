@@ -18,7 +18,9 @@ class Home extends Component {
       loading: true
     });
     fetch('/beers')
-      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        res.json()})
       .then(beers => {
         beers.forEach((beer) => {
           beer.name = `${beer.brewery_name.brewery_name} ${beer.beer_name}`;
