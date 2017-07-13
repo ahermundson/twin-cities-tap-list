@@ -21,10 +21,8 @@ export const beerType = new GraphQLObjectType({
     style: {
       type: GraphQLString
     },
-    {
-      brewery_name: {
-        type: GraphQLID
-      }
+    brewery_name: {
+      type: GraphQLID
     }
   })
 });

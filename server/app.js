@@ -2,6 +2,8 @@ require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose');
+var graphqlHTTP = require('express-graphql');
+var schema = require('./graphql');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -40,6 +42,12 @@ app.use('/beers', beers);
 app.use('/breweries', breweries);
 app.use('/bar', bar);
 app.use('/users', jwtCheck, users);
+
+app.use('/graphql', graphqlHTTP(() => ({
+  schema,
+  graphiql: true,
+  pretty: true
+})));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
