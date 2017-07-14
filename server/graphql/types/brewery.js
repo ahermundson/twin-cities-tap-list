@@ -2,7 +2,8 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLString,
-  GraphQLID
+  GraphQLID,
+  GraphQLList
 } from 'graphql'
 
 import BreweryModel from '../../models/brewery-model'

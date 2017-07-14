@@ -16,7 +16,7 @@ export default {
   },
   resolve(root, params) {
     return BeerModel.findById(params.id)
-    .populate('brewery_name', ['brewery_name'])
-    .exec();
+           .populate('brewery_name', ['brewery_name'])
+           .exec();
   }
 }

@@ -2,10 +2,11 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLString,
-  GraphQLID
+  GraphQLID,
+  GraphQLUnionType
 } from 'graphql'
 
-import BeerModel from '../../models/beer-model'
+import BreweryModel from '../../models/brewery-model'
 import { breweryType } from './brewery'
 
 export const beerType = new GraphQLObjectType({
@@ -22,7 +23,7 @@ export const beerType = new GraphQLObjectType({
       type: GraphQLString
     },
     brewery_name: {
-      type: GraphQLID
+      type: GraphQLString
     }
   })
 });
