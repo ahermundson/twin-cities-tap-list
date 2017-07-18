@@ -15,6 +15,12 @@ export default {
     }
   },
   resolve(root, params) {
-    return BarModel.findById(params.id).exec();
+    return BarModel.findOne({_id: params.id})
+    .populate({
+      path: 'beers_on_tap',
+      populate: {
+        path: 'brewery_name'
+      }
+    }).exec();
   }
 }

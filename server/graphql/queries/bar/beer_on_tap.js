@@ -16,7 +16,14 @@ export default {
     }
   },
   resolve(root, params) {
-    const bars = BarModel.find({beers_on_tap: params.id}).exec();
+    const bars = BarModel.find({beers_on_tap: params.id})
+    .populate({
+      path: 'beers_on_tap',
+      populate: {
+        path: 'brewery_name'
+      }
+    }).exec();
+
     return bars;
   }
 }

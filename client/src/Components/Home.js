@@ -10,26 +10,23 @@ import gql from 'graphql-tag'
 
 const dataSourceConfig = {
   text: "name",
-  value: "_id"
+  value: "id"
 }
 
 class Home extends Component {
 
-  componentDidMount() {
-    console.log(this.props);
-    // this.setState({
-    //   loading: true
-    // });
-    // fetch('/beers')
-    //   .then(res => {
-    //     console.log(res);
-    //     res.json()})
-    //   .then(beers => {
-    //     beers.forEach((beer) => {
-    //       beer.name = `${beer.brewery_name.brewery_name} ${beer.beer_name}`;
-    //     });
-    //     this.setState({dataSource: beers, loading: false})
-    //   });
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.data.loading) {
+      let tempBeerArray = nextProps.data.Beers.map(beer => {
+        return {
+          name: `${beer.brewery_name.brewery_name} ${beer.beer_name}`,
+          id: beer._id
+        }
+      });
+      this.setState({
+        dataSource: tempBeerArray
+      });
+    }
   }
 
   constructor(props){
@@ -41,17 +38,12 @@ class Home extends Component {
     };
 
     this.chosenRequest = this.chosenRequest.bind(this);
-    this.clickButton = this.clickButton.bind(this);
   }
 
   chosenRequest(chosen, index) {
     this.setState({
-      chosenBeer: chosen._id
+      chosenBeer: chosen.id
     });
-  }
-
-  clickButton() {
-    console.log(this.props);
   }
 
   render(){
@@ -83,34 +75,34 @@ class Home extends Component {
       }
     };
 
-    const loading = <Spinner name='double-bounce' color={red600} overrideSpinnerClassName="circle-wrapper"/>;
-
-    const home = <div className="home">
-      <h1 className="header">What do you want to drink tonight?</h1>
-        <AutoComplete
-          hintText="Search..."
-          dataSource={this.state.dataSource}
-          dataSourceConfig={dataSourceConfig}
-          style={styles.autocomplete}
-          inputStyle={styles.textFieldStyle}
-          hintStyle={styles.hintStyle}
-          onNewRequest={this.chosenRequest}
-        />
-        <RaisedButton
-          label="click"
-          onClick={this.clickButton}
-        />
-      <Link to={`/bars/${this.state.chosenBeer}`}>
-        <RaisedButton
-          label="Search"
-          style={styles.button}
-        />
-      </Link>
-    </div>
+    if (this.props.data.loading) {
+      return (
+        <div className="homeContainer">
+          <Spinner name='double-bounce' color={red600} overrideSpinnerClassName="circle-wrapper"/>
+        </div>
+      );
+    }
 
     return(
       <div className="homeContainer">
-        {this.props.data.loading ? loading : home}
+        <div className="home">
+          <h1 className="header">What do you want to drink tonight?</h1>
+            <AutoComplete
+              hintText="Search..."
+              dataSource={this.state.dataSource}
+              dataSourceConfig={dataSourceConfig}
+              style={styles.autocomplete}
+              inputStyle={styles.textFieldStyle}
+              hintStyle={styles.hintStyle}
+              onNewRequest={this.chosenRequest}
+            />
+          <Link to={`/bars/${this.state.chosenBeer}`}>
+            <RaisedButton
+              label="Search"
+              style={styles.button}
+            />
+          </Link>
+        </div>
       </div>
 
     );
@@ -118,10 +110,12 @@ class Home extends Component {
 }
 
 const BeerQuery = gql`query BeerQuery {
-  Beer(id: "592f700f6c5d40a8420e0e42") {
-    style
-    brewery_name
+  Beers {
+    _id
     beer_name
+    brewery_name {
+      brewery_name
+    }
   }
 }`
 

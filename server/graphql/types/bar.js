@@ -4,7 +4,8 @@ import {
   GraphQLString,
   GraphQLID,
   GraphQLList,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLFloat
 } from 'graphql';
 
 import BarModel from '../../models/bar-model';
@@ -34,17 +35,13 @@ export const barType = new GraphQLObjectType({
       type: GraphQLInt
     },
     latitude: {
-      type: GraphQLInt
+      type: GraphQLFloat
     },
     longitude: {
-      type: GraphQLInt
+      type: GraphQLFloat
     },
     beers_on_tap: {
-      type: new GraphQLList(beerType),
-      resolve(beer) {
-        const { _id } = beer;
-        return BeerModel.find({beers_on_tap: _id}).exec();
-      }
+      type: new GraphQLList(beerType)
     },
     website: {
       type: GraphQLString
