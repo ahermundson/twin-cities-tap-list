@@ -3,6 +3,9 @@ import SingleBar from './SingleBar'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import {red600} from 'material-ui/styles/colors'
 import LeafletMap from './Map'
+import Spinner from 'react-spinkit'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 const styles = {
   tabStyle: {
@@ -16,39 +19,19 @@ const styles = {
 
 class Bars extends Component {
 
-  componentDidMount() {
-    if (this.props.match.params.hasOwnProperty('beer_id')){
-      fetch(`/bars/?id=${this.props.match.params.beer_id}`)
-        .then(res => res.json())
-        .then(bars => {
-          let barMarkers = bars.map((bar) => {
-            return {
-              position: [bar.latitude, bar.longitude],
-              name: bar.bar_name
-            }
-          });
-          this.setState({
-            bars: bars,
-            barMarkers: barMarkers
-          });
-        });
-    } else {
-      fetch(`/bars`)
-        .then(res => res.json())
-        .then(bars => {
-          let barMarkers = bars.map((bar) => {
-            return {
-              position: [bar.latitude, bar.longitude],
-              name: bar.bar_name
-            }
-          });
-          this.setState({
-            bars: bars,
-            barMarkers: barMarkers
-          });
-        });
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.data.loading) {
+      let barMarkers = nextProps.data.Beer_On_Tap.map((bar) => {
+        return {
+          position: [bar.latitude, bar.longitude],
+          name: bar.bar_name
+        }
+      });
+      this.setState({
+        bars: nextProps.data.Beer_On_Tap,
+        barMarkers: barMarkers
+      });
     }
-
   }
 
   constructor(props){
@@ -56,10 +39,19 @@ class Bars extends Component {
 
     this.state = {
       bars: [],
-      barMarkers: []};
+      barMarkers: []
+    };
   }
 
   render(){
+    if (this.props.data.loading) {
+      return (
+        <div className="homeContainer">
+          <Spinner name='double-bounce' color={red600} overrideSpinnerClassName="circle-wrapper"/>
+        </div>
+      );
+    }
+
     const barCards = this.state.bars.map((bar) => {
       return <SingleBar
         name={bar.bar_name}
@@ -81,9 +73,7 @@ class Bars extends Component {
             {barCards}
           </Tab>
           <Tab label="Bar Map" style={styles.tabStyle}>
-            <LeafletMap
-              markers={this.state.barMarkers}
-            />
+            <LeafletMap markers={this.state.barMarkers} />
           </Tab>
         </Tabs>
       </div>
@@ -91,4 +81,31 @@ class Bars extends Component {
   }
 }
 
-export default Bars
+const BarQuery = gql`query BarQuery($id: ID!) {
+  Beer_On_Tap(id: $id) {
+    _id
+    bar_name
+    street_address
+    city
+    state
+    zip
+    latitude
+    longitude
+    beers_on_tap {
+      beer_name
+      brewery_name {
+        brewery_name
+      }
+    }
+  }
+}`
+
+const BarsWithQuery = graphql(BarQuery, {
+  options: (ownProps) => ({
+    variables: {
+      id: ownProps.match.params.beer_id
+    }
+  })
+})(Bars)
+
+export default BarsWithQuery

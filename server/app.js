@@ -10,12 +10,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoConnection = require('./modules/mongo-connection');
 
-var index = require('./routes/index');
-var bars = require('./routes/bars');
-var beers = require('./routes/beers');
-var breweries = require('./routes/breweries');
-var bar = require('./routes/singleBar');
-var users = require('./routes/users');
+// var index = require('./routes/index');
+// var bars = require('./routes/bars');
+// var beers = require('./routes/beers');
+// var breweries = require('./routes/breweries');
+// var bar = require('./routes/singleBar');
+// var users = require('./routes/users');
 var app = express();
 const jwt = require('express-jwt');
 
@@ -36,12 +36,12 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/bars', bars);
-app.use('/beers', beers);
-app.use('/breweries', breweries);
-app.use('/bar', bar);
-app.use('/users', jwtCheck, users);
+// app.use('/', index);
+// app.use('/bars', bars);
+// app.use('/beers', beers);
+// app.use('/breweries', breweries);
+// app.use('/bar', bar);
+// app.use('/users', jwtCheck, users);
 
 
 app.use('/graphql', function (req, res, next) {

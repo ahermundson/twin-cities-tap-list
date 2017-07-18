@@ -6,6 +6,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Snackbar from 'material-ui/Snackbar'
 import {red600} from 'material-ui/styles/colors'
+import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import Spinner from 'react-spinkit'
 
 const dataSourceConfig = {
   text: "bar_name",
@@ -50,10 +53,22 @@ const styles = {
 
 class TapListEntry extends Component {
 
-  componentDidMount() {
-    this.getBeers();
-    this.getBars();
-    this.getBreweries();
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.barsQuery.loading && !nextProps.breweriesQuery.loading && !nextProps.beerQuery.loading) {
+      console.log(nextProps);
+      let beersWithBreweryName = nextProps.beerQuery.Beers.map((beer) => {
+        return {
+          name: `${beer.brewery_name.brewery_name} ${beer.beer_name}`,
+          _id: beer._id
+        }
+      });
+      this.setState({
+        dataSource: nextProps.barsQuery.AllBars,
+        dataSourceBrewery: nextProps.breweriesQuery.Breweries,
+        beers: beersWithBreweryName,
+        loading: false
+      });
+    }
   }
 
   constructor(props){
@@ -66,7 +81,8 @@ class TapListEntry extends Component {
       breweries: [],
       dataSourceBrewery: [],
       open: false,
-      noBreweryOpen: false
+      noBreweryOpen: false,
+      loading: true
     };
 
 
@@ -77,39 +93,6 @@ class TapListEntry extends Component {
     this.chosenRequestBrewery = this.chosenRequestBrewery.bind(this);
     this.onBeerSubmit = this.onBeerSubmit.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.fetchData = this.fetchData.bind(this);
-    this.getBars = this.getBars.bind(this);
-    this.getBreweries = this.getBreweries.bind(this);
-    this.getBeers = this.getBeers.bind(this);
-  }
-
-  fetchData(path) {
-    return fetch(`${path}`);
-  }
-
-  async getBars() {
-    const barsResponse = await this.fetchData('/bars');
-    const bars = await barsResponse.json();
-    this.setState({
-      dataSource: bars
-    });
-  }
-
-  async getBreweries() {
-    const breweriesResponse = await this.fetchData('/breweries');
-    const breweries = await breweriesResponse.json();
-    this.setState({
-      dataSourceBrewery: breweries
-    });
-  }
-
-  async getBeers() {
-    const beerResponse = await this.fetchData('/beers');
-    const beers = await beerResponse.json();
-    beers.forEach((beer) => {
-      beer.name = `${beer.brewery_name.brewery_name} ${beer.beer_name}`;
-    });
-    this.setState({beers: beers})
   }
 
   onSubmit() {
@@ -209,6 +192,13 @@ class TapListEntry extends Component {
   };
 
   render(){
+    if (this.state.loading) {
+      return (
+        <div className="homeContainer">
+          <Spinner name='double-bounce' color={red600} overrideSpinnerClassName="circle-wrapper"/>
+        </div>
+      );
+    }
 
     const selectRowProp = {
       mode: 'checkbox',
@@ -305,4 +295,47 @@ class TapListEntry extends Component {
   }
 }
 
-export default TapListEntry
+const BeerQuery = gql`query BeerQuery {
+  Beers {
+    _id
+    beer_name
+    brewery_name {
+      brewery_name
+    }
+  }
+}`
+
+const BreweriesQuery = gql`query BreweriesQuery {
+  Breweries {
+    _id
+    brewery_name
+  }
+}`
+
+const BarsQuery = gql`query BarsQuery {
+  AllBars {
+    _id
+    bar_name
+    beers_on_tap {
+      _id
+      beer_name
+      brewery_name {
+        brewery_name
+      }
+    }
+  }
+}`
+
+const TapListEntryWithData = compose(
+  graphql(BeerQuery, {
+    name: 'beerQuery'
+  }),
+  graphql(BreweriesQuery, {
+    name: 'breweriesQuery'
+  }),
+  graphql(BarsQuery, {
+    name: 'barsQuery'
+  })
+)(TapListEntry)
+
+export default TapListEntryWithData

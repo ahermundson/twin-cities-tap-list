@@ -4,7 +4,6 @@ import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
 class LeafletMap extends Component {
 
   componentWillReceiveProps(nextProps) {
-    console.log("PROPS: ", nextProps);
     this.setState({
       markers: nextProps.markers,
       position: nextProps.markers[0].position
