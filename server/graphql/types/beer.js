@@ -1,5 +1,6 @@
 import {
   GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLString,
   GraphQLID,
@@ -24,6 +25,22 @@ export const beerType = new GraphQLObjectType({
     },
     brewery_name: {
       type: breweryType
+    }
+  })
+});
+
+export const beerInputType = new GraphQLInputObjectType({
+  name: 'BeerInput',
+  description: 'Insert Beer',
+  fields: () => ({
+    beer_name: {
+      type: GraphQLString
+    },
+    style: {
+      type: GraphQLString
+    },
+    brewery_name: {
+      type: GraphQLID
     }
   })
 });
