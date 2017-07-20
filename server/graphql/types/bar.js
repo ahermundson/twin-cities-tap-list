@@ -1,5 +1,6 @@
 import {
   GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLString,
   GraphQLID,
@@ -10,7 +11,7 @@ import {
 
 import BarModel from '../../models/bar-model';
 import BeerModel from '../../models/beer-model';
-import { beerType } from './beer';
+import { beerType, beerInputType } from './beer';
 
 export const barType = new GraphQLObjectType({
   name: 'Bar',
@@ -45,6 +46,17 @@ export const barType = new GraphQLObjectType({
     },
     website: {
       type: GraphQLString
+    }
+  })
+});
+
+
+export const tapListInputType = new GraphQLInputObjectType({
+  name: 'TapListUpdate',
+  description: 'Update Tap List',
+  fields: () => ({
+    beers_on_tap: {
+      type: new GraphQLList(beerInputType)
     }
   })
 });
