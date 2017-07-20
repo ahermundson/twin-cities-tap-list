@@ -55,8 +55,11 @@ export const tapListInputType = new GraphQLInputObjectType({
   name: 'TapListUpdate',
   description: 'Update Tap List',
   fields: () => ({
+    _id: {
+      type: GraphQLID
+    },
     beers_on_tap: {
-      type: new GraphQLList(beerInputType)
+      type: new GraphQLList(GraphQLID)
     }
   })
 });
