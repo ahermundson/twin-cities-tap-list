@@ -326,6 +326,16 @@ const BarsQuery = gql`query BarsQuery {
   }
 }`
 
+const UpdateTapList = gql`
+  mutation UpdateTapList($id: ID!, $beers_on_tap: List!) {
+    UpdateTapList(_id: $id, beers_on_tap: $beers_on_tap) {
+      _id
+      beers_on_tap {
+        beer_name
+      }
+    }
+  }
+
 const TapListEntryWithData = compose(
   graphql(BeerQuery, {
     name: 'beerQuery'
