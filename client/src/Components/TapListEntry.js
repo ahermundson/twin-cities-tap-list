@@ -96,7 +96,7 @@ class TapListEntry extends Component {
 
   onSubmit() {
     let updateTapList = {
-        bar_id: this.state.chosenBar,
+        _id: this.state.chosenBar,
         beers_on_tap: this.state.selected
     };
     //
@@ -333,12 +333,10 @@ const BarsQuery = gql`query BarsQuery {
 }`
 
 const UpdateTapList = gql`
-  mutation UpdateTapList($taplist: tapListInputType) {
-    UpdateTapList({_id: $taplist._id, beers_on_tap: $taplist.beers_on_tap}) {
+  mutation UpdateTapList($taplist: TapListUpdate!) {
+    UpdateList(data: $taplist) {
       _id
-      beers_on_tap {
-        beer_name
-      }
+      bar_name
     }
   }`;
 
