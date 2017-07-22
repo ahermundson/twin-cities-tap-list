@@ -55,7 +55,6 @@ class TapListEntry extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(!nextProps.barsQuery.loading && !nextProps.breweriesQuery.loading && !nextProps.beerQuery.loading) {
-      console.log(nextProps);
       let beersWithBreweryName = nextProps.beerQuery.Beers.map((beer) => {
         return {
           name: `${beer.brewery_name.brewery_name} ${beer.beer_name}`,
@@ -100,17 +99,24 @@ class TapListEntry extends Component {
         bar_id: this.state.chosenBar,
         beers_on_tap: this.state.selected
     };
+    //
+    // fetch('bars', {
+    //   method: 'PUT',
+    //   body: JSON.stringify(updateTapList),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+    // .then(function(response) {
+    //   console.log(`Response from tap list update ${JSON.stringify(response)}`);
+    // });
 
-    fetch('bars', {
-      method: 'PUT',
-      body: JSON.stringify(updateTapList),
-      headers: {
-        "Content-Type": "application/json"
-      }
+    this.props.updateTapList({
+      variables: { taplist: updateTapList }
     })
-    .then(function(response) {
-      console.log(`Response from tap list update ${JSON.stringify(response)}`);
-    });
+    .then(({ data }) => console.log(data))
+    .catch((error) => console.log(error));
+
   }
 
   onBeerSubmit() {
@@ -164,7 +170,7 @@ class TapListEntry extends Component {
   chosenRequest(chosen, index) {
     this.setState({
       chosenBar: chosen._id,
-      selected: chosen.beers_on_tap
+      selected: chosen.beers_on_tap.map(beer => beer._id)
     });
   }
 
@@ -327,14 +333,14 @@ const BarsQuery = gql`query BarsQuery {
 }`
 
 const UpdateTapList = gql`
-  mutation UpdateTapList($id: ID!, $beers_on_tap: List!) {
-    UpdateTapList(_id: $id, beers_on_tap: $beers_on_tap) {
+  mutation UpdateTapList($taplist: tapListInputType) {
+    UpdateTapList({_id: $taplist._id, beers_on_tap: $taplist.beers_on_tap}) {
       _id
       beers_on_tap {
         beer_name
       }
     }
-  }
+  }`;
 
 const TapListEntryWithData = compose(
   graphql(BeerQuery, {
@@ -345,6 +351,9 @@ const TapListEntryWithData = compose(
   }),
   graphql(BarsQuery, {
     name: 'barsQuery'
+  }),
+  graphql(UpdateTapList, {
+    name: 'updateTapList'
   })
 )(TapListEntry)
 
