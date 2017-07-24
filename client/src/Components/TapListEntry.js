@@ -99,57 +99,50 @@ class TapListEntry extends Component {
         _id: this.state.chosenBar,
         beers_on_tap: this.state.selected
     };
-    //
-    // fetch('bars', {
-    //   method: 'PUT',
-    //   body: JSON.stringify(updateTapList),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // })
-    // .then(function(response) {
-    //   console.log(`Response from tap list update ${JSON.stringify(response)}`);
-    // });
 
     this.props.updateTapList({
       variables: { taplist: updateTapList }
     })
-    .then(({ data }) => console.log(data))
-    .catch((error) => console.log(error));
+    .then(({ data }) => {
+      let tempBarArray = this.state.dataSource.map(bar => {
+        if (bar.bar_id === data.UpdateList._id) {
+          return bar.beers_on_tap = this.state.selected
+        } else return bar;
+      });
+
+      this.setState({
+        dataSource: tempBarArray
+      }, function () {
+        console.log(this.state.dataSource);
+      })
+    }).catch((error) => console.log(error));
 
   }
 
   onBeerSubmit() {
     if(this.state.chosenBrewery) {
       let beerToAdd = {
-        brewery: this.state.chosenBrewery,
+        brewery_name: this.state.chosenBrewery,
         beer_name: this.state.beer_name,
-        beer_style: this.state.beer_style
+        style: this.state.beer_style
       };
 
-      fetch('/beers', {
-        method: 'POST',
-        body: JSON.stringify(beerToAdd),
-        headers: {
-          "Content-Type": "application/json"
-        }
+      this.props.addBeer({
+        variables: {beer: beerToAdd}
       })
-      .then(res => {
-        console.log(res.json());
-        res.json()
-      })
-      .then(beer => {
-        var brewery = this.state.dataSourceBrewery.filter(brewery => brewery._id === beer.brewery_name);
-        var addedBeer = {
-          _id: beer._id,
-          name: `${brewery[0].brewery_name} ${beer.beer_name}`
-        };
-        this.setState({
-          open: true,
-          beer_name: '',
-          beer_style: '',
-          beers: [...this.state.beers, addedBeer]
-        });
+      .then(({beer}) => {
+        console.log(beer);
+        // var brewery = this.state.dataSourceBrewery.filter(brewery => brewery._id === beer.brewery_name);
+        // var addedBeer = {
+        //   _id: beer._id,
+        //   name: `${brewery[0].brewery_name} ${beer.beer_name}`
+        // };
+        // this.setState({
+        //   open: true,
+        //   beer_name: '',
+        //   beer_style: '',
+        //   beers: [...this.state.beers, addedBeer]
+        // });
       });
     } else {
       this.setState({
@@ -340,6 +333,13 @@ const UpdateTapList = gql`
     }
   }`;
 
+const AddBeer = gql`
+  mutation AddBeer($beer: BeerInput!) {
+    AddBeer(data: $beer) {
+      _id
+    }
+  }`;
+
 const TapListEntryWithData = compose(
   graphql(BeerQuery, {
     name: 'beerQuery'
@@ -352,6 +352,9 @@ const TapListEntryWithData = compose(
   }),
   graphql(UpdateTapList, {
     name: 'updateTapList'
+  }),
+  graphql(AddBeer, {
+    name: 'addBeer'
   })
 )(TapListEntry)
 
