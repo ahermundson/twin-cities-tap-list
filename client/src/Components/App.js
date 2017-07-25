@@ -48,7 +48,12 @@ const lock = new Auth0Lock(
   options);
 
   const client = new ApolloClient({
-    networkInterface: createNetworkInterface({uri: 'http://localhost:3001/graphql'}),
+    networkInterface: createNetworkInterface({
+      uri: 'http://localhost:3001/graphql',
+      opts: {
+        credentials: 'include'
+      }
+    }),
   })
 
 class App extends Component {
@@ -100,7 +105,6 @@ class App extends Component {
 
   setSession(authResult) {
     // Set the time that the access token will expire at
-    console.log()
     let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);

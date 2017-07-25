@@ -130,8 +130,8 @@ class TapListEntry extends Component {
       this.props.addBeer({
         variables: {beer: beerToAdd}
       })
-      .then(({beer}) => {
-        console.log(beer);
+      .then(({data}) => {
+        console.log(data);
         // var brewery = this.state.dataSourceBrewery.filter(brewery => brewery._id === beer.brewery_name);
         // var addedBeer = {
         //   _id: beer._id,
