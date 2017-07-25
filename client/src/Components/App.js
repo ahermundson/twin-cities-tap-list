@@ -47,14 +47,21 @@ const lock = new Auth0Lock(
   process.env.REACT_APP_AUTH_DOMAIN,
   options);
 
-  const client = new ApolloClient({
-    networkInterface: createNetworkInterface({
-      uri: 'http://localhost:3001/graphql',
-      opts: {
-        credentials: 'include'
-      }
-    }),
-  })
+const networkInterface.use([{
+  applyMiddleware(req, next) {
+    if (!req.options.headers) {
+      req.options.headers = {};
+    }
+    const token = localStorage.getItem('token');
+    req.options.headers.authorization = token ?   `Bearer ${token}` : null;
+    next();
+  }
+}]);
+
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface({
+    uri: 'http://localhost:3001/graphql'}),
+});
 
 class App extends Component {
 
