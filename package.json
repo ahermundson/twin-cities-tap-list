@@ -6,6 +6,8 @@
     "start": "nodemon server/app.js --exec babel-node --presets es2015,stage-2"
   },
   "dependencies": {
+    "@blueprintjs/core": "^1.23.1",
+    "@blueprintjs/table": "^1.20.0",
     "auth0-js": "^8.8.0",
     "auth0-lock": "^10.18.0",
     "body-parser": "~1.17.1",
