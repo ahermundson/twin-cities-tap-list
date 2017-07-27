@@ -14,7 +14,8 @@ export default {
       type: new GraphQLNonNull(GraphQLID)
     }
   },
-  resolve(root, params) {
+  resolve(root, params, context) {
+    console.log(context.headers);
     return BarModel.findOne({_id: params.id})
     .populate({
       path: 'beers_on_tap',

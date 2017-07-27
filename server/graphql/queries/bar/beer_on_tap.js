@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+
 import {
   GraphQLList,
   GraphQLNonNull,
@@ -15,7 +17,11 @@ export default {
       type: new GraphQLNonNull(GraphQLID)
     }
   },
-  resolve(root, params) {
+  resolve(root, params, context) {
+    console.log('CONTEXT: ', context.headers);
+    var decoded = jwt.verify(context.headers.authorization, process.env.AUTH_SECRET);
+    console.log('DECODED: ', decoded )
+
     const bars = BarModel.find({beers_on_tap: params.id})
     .populate({
       path: 'beers_on_tap',

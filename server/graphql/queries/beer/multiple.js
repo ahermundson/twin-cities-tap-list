@@ -7,7 +7,8 @@ import BeerModel from '../../../models/beer-model'
 
 export default {
   type: new GraphQLList(beerType),
-  resolve() {
+  resolve(context) {
+    console.log(context);
     const beers = BeerModel.find()
                   .populate('brewery_name', ['brewery_name'])
                   .exec();
