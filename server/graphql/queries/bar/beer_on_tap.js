@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+var jwt = require('jsonwebtoken');
 
 import {
   GraphQLList,
@@ -18,10 +18,13 @@ export default {
     }
   },
   resolve(root, params, context) {
-    console.log('CONTEXT: ', context.headers);
-    var decoded = jwt.verify(context.headers.authorization, process.env.AUTH_SECRET);
-    console.log('DECODED: ', decoded )
-
+    jwt.verify(context.headers.authorization, new Buffer(process.env.AUTH_SECRET), { algorithms: ['HS256'] }, function(err, decoded) {
+      if (err) {
+        console.log("Error: ", err);
+      } else {
+        console.log('DECODED: ', decoded );
+      }
+    });
     const bars = BarModel.find({beers_on_tap: params.id})
     .populate({
       path: 'beers_on_tap',

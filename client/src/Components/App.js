@@ -57,7 +57,7 @@ networkInterface.use([{
       req.options.headers = {};
     }
     const token = localStorage.getItem('id_token');
-    req.options.headers.authorization = token ?  `Bearer ${token}` : null;
+    req.options.headers.authorization = token ?  token : null;
     next();
   }
 }]);
