@@ -7,7 +7,7 @@ import {
 } from 'graphql'
 
 import UserModel from '../../models/user-model'
-import beerType from './beer'
+import {beerType} from './beer'
 
 export const userType = new GraphQLObjectType({
   name: 'User',
@@ -25,7 +25,7 @@ export const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString)
     },
     favorites: {
-      type: GraphQLList(beerType)
+      type: new GraphQLList(beerType)
     }
   })
 });

@@ -31,7 +31,7 @@ const options = {
   auth: {
     responseType: 'token',
     redirect: false,
-    params: {scope: 'openid'}
+    params: {scope: 'openid email'}
   },
   theme: {
     primaryColor: red600,
