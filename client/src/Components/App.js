@@ -31,7 +31,7 @@ const options = {
   auth: {
     responseType: 'token',
     redirect: false,
-    params: {scope: 'openid email'}
+    params: {scope: 'openid email profile'}
   },
   theme: {
     primaryColor: red600,
@@ -71,25 +71,26 @@ class App extends Component {
   componentDidMount() {
 
     lock.on('authenticated', (authResult) => {
+      console.log(authResult);
       lock.hide();
       this.setSession(authResult);
       this.closeLeftNav();
       let accessToken = localStorage.getItem('id_token');
-      lock.getUserInfo(authResult.accessToken, (err, profile) => {
-        fetch(`/users/?email=${profile.email}`, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        })
-          .then(res => res.json())
-          .then(user => {
-            console.log(user);
-            this.setState({
-              user: user,
-              isAuth: true
-            });
-          });
-      });
+      // lock.getUserInfo(authResult.accessToken, (err, profile) => {
+      //   fetch(`/users/?email=${profile.email}`, {
+      //     headers: {
+      //       'Authorization': `Bearer ${accessToken}`
+      //     }
+      //   })
+      //     .then(res => res.json())
+      //     .then(user => {
+      //       console.log(user);
+      //       this.setState({
+      //         user: user,
+      //         isAuth: true
+      //       });
+      //     });
+      // });
     });
 
     this.setState({

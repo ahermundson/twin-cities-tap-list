@@ -23,8 +23,12 @@ export default {
         console.log("Error: ", err);
       } else {
         console.log('DECODED: ', decoded );
-        if (decoded.email_verified) {
-          return UserModel.findOne({email: decoded.email})
+        switch(decoded.identities.provider) {
+          case 'google-oauth2': return UserModel.findOne({email: decoded.email});
+          break;
+          case 'facebook': return UserModel.findOne({facebook_userid: decoded.identities.user_id});
+          break;
+          case 'twitter': return UserModel.findOne({twitter_userid: decoded.identities.user_id});
         }
       }
     });

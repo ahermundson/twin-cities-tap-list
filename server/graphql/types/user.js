@@ -22,7 +22,13 @@ export const userType = new GraphQLObjectType({
       type: GraphQLString
     },
     email: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: GraphQLString
+    },
+    facebook_userid: {
+      type: GraphQLString
+    },
+    twitter_userid: {
+      type: GraphQLString
     },
     favorites: {
       type: new GraphQLList(beerType)
