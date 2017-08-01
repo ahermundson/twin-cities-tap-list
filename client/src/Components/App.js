@@ -18,8 +18,8 @@ import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import {red600} from 'material-ui/styles/colors'
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
-import { ApolloProvider } from 'react-apollo'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 injectTapEventPlugin();
 
@@ -48,34 +48,19 @@ const lock = new Auth0Lock(
   process.env.REACT_APP_AUTH_DOMAIN,
   options);
 
-const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:3001/graphql'
-})
-
-networkInterface.use([{
-  applyMiddleware(req, next) {
-    if (!req.options.headers) {
-      req.options.headers = {};
-    }
-    const token = localStorage.getItem('id_token');
-    req.options.headers.authorization = token ?  token : null;
-    next();
-  }
-}]);
-
-const client = new ApolloClient({
-  networkInterface
-});
-
 class App extends Component {
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+  }
 
   componentDidMount() {
 
     lock.on('authenticated', (authResult) => {
-      console.log('authenticated');
       lock.hide();
       this.setSession(authResult);
       this.closeLeftNav();
+      console.log(this.props);
     });
 
     this.setState({
@@ -137,83 +122,89 @@ class App extends Component {
 
 
     return (
-      <ApolloProvider client={client}>
-        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-          <Router>
-            <div className="App">
-              <AppBar
-                title="Twin Cities Tap List"
-                style={styles}
-                iconClassNameRight="muidocs-icon-navigation-expand-more"
-                onLeftIconButtonTouchTap={this.handleToggle}
+      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+        <Router>
+          <div className="App">
+            <AppBar
+              title="Twin Cities Tap List"
+              style={styles}
+              iconClassNameRight="muidocs-icon-navigation-expand-more"
+              onLeftIconButtonTouchTap={this.handleToggle}
+            />
+            <Drawer
+              open={this.state.menuOpen}
+              onRequestChange={open => this.setState({menuOpen: open})}
+              docked={false}>
+              {
+                this.state.isAuth ? <div><MenuItem
+                  onTouchTap={this.closeLeftNav}
+                  value={'/profile'}
+                  primaryText="Your Profile"
+                  containerElement={<Link to={`/profile/${this.state.user._id}`} />}
+                />
+                <Divider /></div> : null
+              }
+              <MenuItem
+                onTouchTap={this.closeLeftNav}
+                value={'/'}
+                primaryText="Home"
+                containerElement={<Link to='/' />}
               />
-              <Drawer
-                open={this.state.menuOpen}
-                onRequestChange={open => this.setState({menuOpen: open})}
-                docked={false}>
-                {
-                  this.state.isAuth ? <div><MenuItem
-                    onTouchTap={this.closeLeftNav}
-                    value={'/profile'}
-                    primaryText="Your Profile"
-                    containerElement={<Link to={`/profile/${this.state.user._id}`} />}
-                  />
-                  <Divider /></div> : null
-                }
+              <Divider />
+              <MenuItem
+                onTouchTap={this.closeLeftNav}
+                value={'/beers'}
+                primaryText="All Beers"
+                containerElement={<Link to='/beers' />}
+              />
+              <Divider />
+              <MenuItem
+                onTouchTap={this.closeLeftNav}
+                value={'/allbars'}
+                primaryText="All Bars"
+                containerElement={<Link to='/allbars' />}
+              />
+              <Divider />
                 <MenuItem
                   onTouchTap={this.closeLeftNav}
-                  value={'/'}
-                  primaryText="Home"
-                  containerElement={<Link to='/' />}
+                  value={'/taplistentry'}
+                  primaryText="Enter A Tap List"
+                  containerElement={<Link to='/taplistentry' />}
                 />
-                <Divider />
-                <MenuItem
-                  onTouchTap={this.closeLeftNav}
-                  value={'/beers'}
-                  primaryText="All Beers"
-                  containerElement={<Link to='/beers' />}
+              <Divider />
+              {
+                this.state.isAuth ? <MenuItem
+                  onTouchTap={this.logout}
+                  primaryText="Logout"
+                /> : <MenuItem
+                  onTouchTap={this.login}
+                  primaryText="Login / Sign Up"
                 />
-                <Divider />
-                <MenuItem
-                  onTouchTap={this.closeLeftNav}
-                  value={'/allbars'}
-                  primaryText="All Bars"
-                  containerElement={<Link to='/allbars' />}
-                />
-                <Divider />
-                  <MenuItem
-                    onTouchTap={this.closeLeftNav}
-                    value={'/taplistentry'}
-                    primaryText="Enter A Tap List"
-                    containerElement={<Link to='/taplistentry' />}
-                  />
-                <Divider />
-                {
-                  this.state.isAuth ? <MenuItem
-                    onTouchTap={this.logout}
-                    primaryText="Logout"
-                  /> : <MenuItem
-                    onTouchTap={this.login}
-                    primaryText="Login / Sign Up"
-                  />
-                }
-              </Drawer>
-              <Route exact path="/" component={Home} />
-              <Route path="/home" component={Home} />
-              <Route path="/beers" component={Beers} />
-              <Route path="/bars/:beer_id" component={Bars} />
-              <Route path="/allbars/" component={Bars} />
-              <Route path="/taplistentry" component={TapListEntry} />
-              <Route path="/bar/:beer_id" component={BarInfo} />
-              <Route path="/profile/:user_id" component={Profile} />
-            </div>
-          </Router>
-
-        </MuiThemeProvider>
-      </ApolloProvider>
-
+              }
+            </Drawer>
+            <Route exact path="/" component={Home} />
+            <Route path="/home" component={Home} />
+            <Route path="/beers" component={Beers} />
+            <Route path="/bars/:beer_id" component={Bars} />
+            <Route path="/allbars/" component={Bars} />
+            <Route path="/taplistentry" component={TapListEntry} />
+            <Route path="/bar/:beer_id" component={BarInfo} />
+            <Route path="/profile/:user_id" component={Profile} />
+          </div>
+        </Router>
+      </MuiThemeProvider>
     );
   }
 }
 
-export default App;
+const UserQuery = gql`query UserQuery {
+  User {
+    _id
+    first_name
+    last_name
+  }
+}`;
+
+const AppWithData = graphql(UserQuery)(App)
+
+export default AppWithData;

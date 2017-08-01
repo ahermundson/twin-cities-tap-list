@@ -16,7 +16,6 @@ const dataSourceConfig = {
 class Home extends Component {
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if(!nextProps.data.loading) {
       let tempBeerArray = nextProps.data.Beers.map(beer => {
         return {
