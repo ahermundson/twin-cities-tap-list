@@ -10,12 +10,7 @@ import { beerType } from '../../types/beer'
 
 export default {
   type: userType,
-  args: {
-    email: {
-      name: 'Email',
-      type: new GraphQLNonNull(GraphQLString)
-    }
-  },
+  args: {},
 
   resolve(root, params, context) {
     jwt.verify(context.headers.authorization, new Buffer(process.env.AUTH_SECRET), { algorithms: ['HS256'] }, function(err, decoded) {

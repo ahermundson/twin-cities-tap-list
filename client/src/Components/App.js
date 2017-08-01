@@ -20,6 +20,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import {red600} from 'material-ui/styles/colors'
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
+
 injectTapEventPlugin();
 
 const styles = {
@@ -71,26 +72,10 @@ class App extends Component {
   componentDidMount() {
 
     lock.on('authenticated', (authResult) => {
-      console.log(authResult);
+      console.log('authenticated');
       lock.hide();
       this.setSession(authResult);
       this.closeLeftNav();
-      let accessToken = localStorage.getItem('id_token');
-      // lock.getUserInfo(authResult.accessToken, (err, profile) => {
-      //   fetch(`/users/?email=${profile.email}`, {
-      //     headers: {
-      //       'Authorization': `Bearer ${accessToken}`
-      //     }
-      //   })
-      //     .then(res => res.json())
-      //     .then(user => {
-      //       console.log(user);
-      //       this.setState({
-      //         user: user,
-      //         isAuth: true
-      //       });
-      //     });
-      // });
     });
 
     this.setState({
