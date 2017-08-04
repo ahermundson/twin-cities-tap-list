@@ -7,11 +7,19 @@ import Spinner from 'react-spinkit'
 import {red600} from 'material-ui/styles/colors'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import styled from 'styled-comonents'
 
 const dataSourceConfig = {
   text: "name",
   value: "id"
 }
+
+const HomeContainer = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 class Home extends Component {
 
@@ -84,7 +92,7 @@ class Home extends Component {
     }
 
     return(
-      <div className="homeContainer">
+      <HomeContainer>
         <div className="home">
           <h1 className="header">What do you want to drink tonight?</h1>
             <AutoComplete
@@ -103,7 +111,7 @@ class Home extends Component {
             />
           </Link>
         </div>
-      </div>
+      </HomeContainer>
 
     );
   }
