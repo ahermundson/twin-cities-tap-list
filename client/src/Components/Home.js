@@ -7,7 +7,7 @@ import Spinner from 'react-spinkit'
 import {red600} from 'material-ui/styles/colors'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import styled from 'styled-comonents'
+import styled from 'styled-components'
 
 const dataSourceConfig = {
   text: "name",
@@ -130,3 +130,5 @@ const BeerQuery = gql`query BeerQuery {
 const HomeWithData = graphql(BeerQuery)(Home)
 
 export default HomeWithData;
+
+// export default Home;

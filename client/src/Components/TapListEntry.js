@@ -9,6 +9,7 @@ import {red600} from 'material-ui/styles/colors'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import Spinner from 'react-spinkit'
+import styled from 'styled-components'
 
 const dataSourceConfig = {
   text: "bar_name",
@@ -18,6 +19,13 @@ const dataSourceConfigBrewery = {
   text: "brewery_name",
   value: "_id"
 }
+
+const beerInputDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const styles = {
   autocomplete: {
