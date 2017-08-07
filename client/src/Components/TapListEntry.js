@@ -78,6 +78,10 @@ class TapListEntry extends Component {
     }
   }
 
+  componentDidMount() {
+    const updateQuery = this.props.beerQuery;
+  }
+
   constructor(props){
     super(props);
 

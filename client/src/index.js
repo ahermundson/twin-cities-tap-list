@@ -5,10 +5,18 @@ import './index.css';
 import App from './Components/App'
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
+import { Client, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
+
+const wsClient = new Client('ws://localhost:3000');
 
 const networkInterface = createNetworkInterface({
   uri: 'http://localhost:3001/graphql'
 })
+
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  networkInterface,
+  wsClient
+);
 
 networkInterface.use([{
   applyMiddleware(req, next) {
@@ -22,7 +30,7 @@ networkInterface.use([{
 }]);
 
 const client = new ApolloClient({
-  networkInterface
+  networkInterface: networkInterfaceWithSubscriptions
 });
 
 ReactDOM.render(
