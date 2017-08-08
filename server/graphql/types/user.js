@@ -8,6 +8,8 @@ import {
 
 import UserModel from '../../models/user-model'
 import {beerType} from './beer'
+import {breweryType} from './brewery'
+import {barType} from './bar'
 
 export const userType = new GraphQLObjectType({
   name: 'User',
@@ -30,8 +32,14 @@ export const userType = new GraphQLObjectType({
     twitter_userid: {
       type: GraphQLString
     },
-    favorites: {
+    favorite_beers: {
       type: new GraphQLList(beerType)
+    },
+    favorite_bars: {
+      type: new GraphQLList(barType)
+    },
+    favorite_breweries: {
+      type: new GraphQLList(breweryType)
     }
   })
 });

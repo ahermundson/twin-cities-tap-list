@@ -2,21 +2,22 @@ require('dotenv').config();
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import '../node_modules/font-awesome/css/font-awesome.min.css'; 
 import App from './Components/App'
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
-import { Client, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
+// import { Client, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 
-const wsClient = new Client('ws://localhost:3000');
+// const wsClient = new Client('ws://localhost:3000');
 
 const networkInterface = createNetworkInterface({
   uri: 'http://localhost:3001/graphql'
 })
 
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient
-);
+// const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+//   networkInterface,
+//   wsClient
+// );
 
 networkInterface.use([{
   applyMiddleware(req, next) {
@@ -29,9 +30,13 @@ networkInterface.use([{
   }
 }]);
 
+// const client = new ApolloClient({
+//   networkInterface: networkInterfaceWithSubscriptions
+// });
+
 const client = new ApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions
-});
+  networkInterface
+})
 
 ReactDOM.render(
   <ApolloProvider client={client}>

@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Beer = require('./beer-model')
+var Beer = require('./beer-model');
+var Bar = require('./bar-model');
+var Brewery = require('./brewery-model');
 
 var userSchema = new Schema({
   first_name: {type: String},
@@ -8,7 +10,9 @@ var userSchema = new Schema({
   email: {type: String},
   facebook_userid: {type: String},
   twitter_userid: {type: String},
-  favorites: [{type: Schema.Types.ObjectId, ref: 'Beer'}]
+  favorite_beers: [{type: Schema.Types.ObjectId, ref: 'Beer'}],
+  favorite_bars: [{type: Schema.Types.ObjectId, ref: 'Bar'}],
+  favorite_breweries: [{type: Schema.Types.ObjectId, ref: 'Brewery'}]
 },
   {collection: 'Users'});
 

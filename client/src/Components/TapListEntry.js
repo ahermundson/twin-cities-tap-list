@@ -20,12 +20,12 @@ const dataSourceConfigBrewery = {
   value: "_id"
 }
 
-const beerInputDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+// const beerInputDiv = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const styles = {
   autocomplete: {
@@ -79,7 +79,7 @@ class TapListEntry extends Component {
   }
 
   componentDidMount() {
-    const updateQuery = this.props.beerQuery;
+    // const updateQuery = this.props.beerQuery;
   }
 
   constructor(props){

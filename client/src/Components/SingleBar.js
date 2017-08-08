@@ -70,6 +70,7 @@ class SingleBar extends Component {
           <span>{this.props.street_address}</span>
           <span>{this.props.city}, {this.props.state}</span>
           <span>{this.props.zip}</span>
+
         </CardText>
         <CardTitle title="Card title" subtitle="Card subtitle" expandable={true} />
         <BarMap
@@ -77,6 +78,7 @@ class SingleBar extends Component {
           name={this.props.name}
           expandable={true}
         />
+      <i className="fa fa-heart"></i>
       {!this.state.expanded ? <CardActions>
         <FlatButton label="More" onTouchTap={this.handleExpand} />
         </CardActions> : null}
