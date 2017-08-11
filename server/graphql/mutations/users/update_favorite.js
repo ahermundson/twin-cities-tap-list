@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+
 import {
   GraphQLNonNull,
   GraphQLID,
@@ -7,24 +9,28 @@ import {
 import { userType } from '../../types/user'
 import UserModel from '../../../models/user-model'
 
-// TODO MAKE EXPORT FUNCTION
-
 export default {
-  type: barType,
+  type: userType,
   args: {
     data: {
       name: 'tap_list',
-      type: new GraphQLNonNull(tapListInputType)
+      type: new GraphQLNonNull(userFavoriteListInputType)
     }
   },
-  resolve(root, params) {
-    let tap_list = BarModel.findOneAndUpdate({"_id": params.data._id},
-      { $set: {"beers_on_tap": params.data.beers_on_tap } }
-    )
-    if (!tap_list) {
-      console.log("Likely an error updating taplist.");
-    } else {
-      return tap_list;
+  resolve(root, params, context) {
+
+    const decoded = jwt.verify(context.headers.authorization, new Buffer(process.env.AUTH_SECRET), { algorithms: ['HS256'] });
+
+    if (!decoded) {
+      return 'No user found.';
     }
-  }
+    let userFavorite = UserModel.findOneAndUpdate({"user_id": decoded.identities[0].user_id},
+      { $set: {"favorite_beers": params.data.favorite_beers } }
+    )
+    if (!userFavorite) {
+      console.log("Error updating users favorite")
+    }
+    else {
+      return userFavorite;
+    }
 }
