@@ -52,6 +52,8 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     console.log(nextProps);
+
+    console.log(nextProps.getUserData.User);
   }
 
   componentDidMount() {
@@ -60,7 +62,7 @@ class App extends Component {
       lock.hide();
       this.setSession(authResult);
       this.closeLeftNav();
-      console.log(this.props);
+      this.props.getUserData();
     });
 
     this.setState({
@@ -205,6 +207,8 @@ const UserQuery = gql`query UserQuery {
   }
 }`;
 
-const AppWithData = graphql(UserQuery)(App)
+const AppWithData = graphql(UserQuery, {
+  name: 'getUserData'
+})(App)
 
 export default AppWithData;

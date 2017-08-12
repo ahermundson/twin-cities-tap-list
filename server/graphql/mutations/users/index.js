@@ -1,4 +1,4 @@
-import UpdateFavorites from './update_favorites';
+import UpdateFavorites from './update_favorite';
 
 export default {
   UpdateFavorites

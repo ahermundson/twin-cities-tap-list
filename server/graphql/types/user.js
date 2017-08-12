@@ -3,7 +3,8 @@ import {
   GraphQLNonNull,
   GraphQLString,
   GraphQLID,
-  GraphQLList
+  GraphQLList,
+  GraphQLInputObjectType
 } from 'graphql'
 
 import UserModel from '../../models/user-model'
@@ -23,13 +24,7 @@ export const userType = new GraphQLObjectType({
     last_name: {
       type: GraphQLString
     },
-    email: {
-      type: GraphQLString
-    },
-    facebook_userid: {
-      type: GraphQLString
-    },
-    twitter_userid: {
+    user_id: {
       type: GraphQLString
     },
     favorite_beers: {
@@ -51,8 +46,8 @@ export const userFavoriteListInputType = new GraphQLInputObjectType({
     user_id: {
       type: GraphQLID
     },
-    favorite_beers: {
-      type: new GraphQLList(GraphQLID)
+    bar_id: {
+      type: GraphQLID
     }
   })
 });

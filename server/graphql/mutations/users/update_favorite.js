@@ -6,14 +6,14 @@ import {
   GraphQLList
 } from 'graphql'
 
-import { userType } from '../../types/user'
+import { userType, userFavoriteListInputType } from '../../types/user'
 import UserModel from '../../../models/user-model'
 
 export default {
   type: userType,
   args: {
     data: {
-      name: 'tap_list',
+      name: 'bar_id',
       type: new GraphQLNonNull(userFavoriteListInputType)
     }
   },
@@ -25,7 +25,7 @@ export default {
       return 'No user found.';
     }
     let userFavorite = UserModel.findOneAndUpdate({"user_id": decoded.identities[0].user_id},
-      { $set: {"favorite_beers": params.data.favorite_beers } }
+      { $push: {"favorite_bars": params.data.bar_id } }
     )
     if (!userFavorite) {
       console.log("Error updating users favorite")
@@ -33,4 +33,5 @@ export default {
     else {
       return userFavorite;
     }
+  }
 }

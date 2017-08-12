@@ -21,16 +21,6 @@ export default {
       return 'No user found.';
     }
 
-    switch(decoded.identities[0].provider) {
-      case 'google-oauth2':
-        return UserModel.findOne({email: decoded.email}).exec();
-      break;
-      case 'facebook':
-        return UserModel.findOne({facebook_userid: decoded.identities[0].user_id});
-      break;
-      case 'twitter':
-        return UserModel.findOne({twitter_userid: decoded.identities[0].user_id});
-      break;
-    }
+    return UserModel.findOne({user_id: decoded.identities[0].user_id});
   }
 }

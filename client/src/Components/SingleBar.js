@@ -35,6 +35,7 @@ class SingleBar extends Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.handleExpand = this.handleExpand.bind(this);
     this.handleReduce = this.handleReduce.bind(this);
+    this.addFavorite = this.addFavorite.bind(this);
   }
 
   handleExpandChange = (expanded) => {
@@ -52,6 +53,10 @@ class SingleBar extends Component {
   handleReduce = () => {
     this.setState({expanded: false});
   };
+
+  addFavorite = () => {
+    console.log(this.props.bar_id);
+  }
 
   render(){
     return(
@@ -78,7 +83,7 @@ class SingleBar extends Component {
           name={this.props.name}
           expandable={true}
         />
-      <i className="fa fa-heart"></i>
+      <i className="fa fa-heart" onClick={this.addFavorite}></i>
       {!this.state.expanded ? <CardActions>
         <FlatButton label="More" onTouchTap={this.handleExpand} />
         </CardActions> : null}
@@ -92,4 +97,17 @@ class SingleBar extends Component {
   }
 }
 
-export default SingleBar
+
+const UpdateUserFavorites = gql`
+  mutation UpdateFavorites($favorite_bar: UserFavoriteBar!) {
+    UpdateFavorites(data: $favorite_bar) {
+      _id
+    }
+  }`;
+
+
+const SingleBarWithData = graphql(UpdateUserFavorites, {
+  name: 'updateUserFavorite'
+})(SingleBar)
+
+export default SingleBarWithData
