@@ -43,9 +43,6 @@ export const userFavoriteListInputType = new GraphQLInputObjectType({
   name: 'UserFavoriteListUpdate',
   description: 'Update User Favorite',
   fields: () => ({
-    user_id: {
-      type: GraphQLID
-    },
     bar_id: {
       type: GraphQLID
     }

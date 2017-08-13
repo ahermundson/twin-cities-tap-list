@@ -4,6 +4,8 @@ import FlatButton from 'material-ui/FlatButton'
 import BarMap from './BarMap'
 import {red600} from 'material-ui/styles/colors'
 import {Link} from 'react-router-dom'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 const styles = {
   card: {
@@ -56,6 +58,15 @@ class SingleBar extends Component {
 
   addFavorite = () => {
     console.log(this.props.bar_id);
+    let favorite_bar = {
+        bar_id: this.props.bar_id
+    };
+    this.props.UpdateFavorites({
+      variables: { favorite_bar: favorite_bar }
+    })
+    .then(({ data }) => {
+      console.log(data);
+    })
   }
 
   render(){
@@ -99,15 +110,14 @@ class SingleBar extends Component {
 
 
 const UpdateUserFavorites = gql`
-  mutation UpdateFavorites($favorite_bar: UserFavoriteBar!) {
+  mutation UpdateFavorites($favorite_bar: UserFavoriteListUpdate!) {
     UpdateFavorites(data: $favorite_bar) {
       _id
     }
   }`;
 
-
 const SingleBarWithData = graphql(UpdateUserFavorites, {
-  name: 'updateUserFavorite'
+  name: 'UpdateFavorites'
 })(SingleBar)
 
 export default SingleBarWithData

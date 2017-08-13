@@ -4,5 +4,6 @@ import updateFavorite from './users'
 
 export default {
   ...beerMutation,
-  ...tapListMutation
+  ...tapListMutation,
+  ...updateFavorite
 }
