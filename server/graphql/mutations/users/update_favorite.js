@@ -25,7 +25,7 @@ export default {
       return 'No user found.';
     }
     let userFavorite = UserModel.findOneAndUpdate({"user_id": decoded.identities[0].user_id},
-      { $push: {"favorite_bars": params.data.bar_id } }
+      { $addToSet: {"favorite_bars": params.data.bar_id } }
     )
     if (!userFavorite) {
       console.log("Error updating users favorite")

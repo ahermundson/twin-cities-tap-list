@@ -7,6 +7,10 @@ import {Link} from 'react-router-dom'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
+const heartStyle = {
+  color: 'black'
+}
+
 const styles = {
   card: {
     margin: "0 auto 20px",
@@ -94,7 +98,7 @@ class SingleBar extends Component {
           name={this.props.name}
           expandable={true}
         />
-      <i className="fa fa-heart" onClick={this.addFavorite}></i>
+      <i style={heartStyle} className="fa fa-heart" onClick={this.addFavorite}></i>
       {!this.state.expanded ? <CardActions>
         <FlatButton label="More" onTouchTap={this.handleExpand} />
         </CardActions> : null}
