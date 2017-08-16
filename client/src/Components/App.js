@@ -59,6 +59,7 @@ class App extends Component {
   componentDidMount() {
 
     lock.on('authenticated', (authResult) => {
+      console.log(this.props);
       lock.hide();
       this.setSession(authResult);
       this.closeLeftNav();

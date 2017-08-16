@@ -4,7 +4,7 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import {red600} from 'material-ui/styles/colors'
 import LeafletMap from './Map'
 import Spinner from 'react-spinkit'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 const styles = {
@@ -20,18 +20,19 @@ const styles = {
 class Bars extends Component {
 
   componentWillReceiveProps(nextProps) {
-    if(!nextProps.data.loading) {
-      let barMarkers = nextProps.data.Beer_On_Tap.map((bar) => {
-        return {
-          position: [bar.latitude, bar.longitude],
-          name: bar.bar_name
-        }
-      });
-      this.setState({
-        bars: nextProps.data.Beer_On_Tap,
-        barMarkers: barMarkers
-      });
-    }
+    console.log(nextProps);
+    // if(!nextProps.BarQuery.loading) {
+    //   let barMarkers = nextProps.BarQuery.Beer_On_Tap.map((bar) => {
+    //     return {
+    //       position: [bar.latitude, bar.longitude],
+    //       name: bar.bar_name
+    //     }
+    //   });
+    //   this.setState({
+    //     bars: nextProps.data.Beer_On_Tap,
+    //     barMarkers: barMarkers
+    //   });
+    // }
   }
 
   constructor(props){
@@ -44,13 +45,13 @@ class Bars extends Component {
   }
 
   render(){
-    if (this.props.data.loading) {
-      return (
-        <div className="homeContainer">
-          <Spinner name='double-bounce' color={red600} overrideSpinnerClassName="circle-wrapper"/>
-        </div>
-      );
-    }
+    // if (this.props.data.loading) {
+    //   return (
+    //     <div className="homeContainer">
+    //       <Spinner name='double-bounce' color={red600} overrideSpinnerClassName="circle-wrapper"/>
+    //     </div>
+    //   );
+    // }
 
     const barCards = this.state.bars.map((bar) => {
       return <SingleBar
@@ -98,14 +99,29 @@ const BarQuery = gql`query BarQuery($id: ID!) {
       }
     }
   }
-}`
+}`;
 
-const BarsWithQuery = graphql(BarQuery, {
-  options: (ownProps) => ({
-    variables: {
-      id: ownProps.match.params.beer_id
+
+const UserFavorites = gql`query UserFavoritesQuery {
+  User {
+    favorite_bars {
+      street_address
     }
-  })
-})(Bars)
+  }
+}`;
 
-export default BarsWithQuery
+const BarsWithData = compose(
+  graphql(BarQuery, {
+    name: 'BarQuery',
+    options: (ownProps) => ({
+      variables: {
+        id: ownProps.match.params.beer_id
+      }
+    })
+  }),
+  graphql(UserFavorites, {
+    name: 'UserFavorites'
+  })
+)(Bars)
+
+export default BarsWithData
